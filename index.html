@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coin Lab</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --text:#14171c; --muted:#5b6472; --line:#e2e5ea;
+  --accent:#4f46e5; --accent-soft:#eef0ff; --ok:#15803d; --ok-soft:#e7f6ec; --bad:#b91c1c; --bad-soft:#fdeaea;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1115; --panel:#171a21; --text:#e7e9ee; --muted:#9aa3b2; --line:#2a2f3a;
+  --accent:#8b83ff; --accent-soft:#232245; --ok:#4ade80; --ok-soft:#12291b; --bad:#f87171; --bad-soft:#2d1515; }}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a21; --text:#e7e9ee; --muted:#9aa3b2; --line:#2a2f3a;
+  --accent:#8b83ff; --accent-soft:#232245; --ok:#4ade80; --ok-soft:#12291b; --bad:#f87171; --bad-soft:#2d1515; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:20px 16px 0;max-width:1100px;margin:auto}
+h1{margin:0;font-size:26px} h1 span{color:var(--accent)}
+header p{margin:4px 0 0;color:var(--muted)}
+nav{display:flex;gap:6px;flex-wrap:wrap;max-width:1100px;margin:16px auto 0;padding:0 16px}
+nav button{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:8px 14px;border-radius:999px;cursor:pointer;font:inherit}
+nav button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:1100px;margin:auto;padding:16px}
+section{display:none} section.on{display:block}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card h3{margin:0 0 8px;font-size:16px}
+.note{color:var(--muted);font-size:13px;margin:4px 0 10px}
+.mono,code{font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.hash{font-family:var(--mono);font-size:12.5px;word-break:break-all;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+.formula{font-family:var(--mono);background:var(--accent-soft);border-radius:8px;padding:10px;font-size:13px;word-break:break-word}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}
+button.btn{margin-top:10px;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+button.danger{background:var(--bad)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:var(--accent-soft);color:var(--accent)}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+.log{max-height:220px;overflow:auto;font-family:var(--mono);font-size:12px}
+.log div{padding:4px 0;border-bottom:1px dashed var(--line)}
+.wallet{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.wallet:last-child{border:0}
+.big{font-size:28px;font-weight:700;font-family:var(--mono)}
+.chain{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.block{flex:0 0 280px;border:2px solid var(--ok);background:var(--ok-soft);border-radius:12px;padding:12px}
+.block.broken{border-color:var(--bad);background:var(--bad-soft)}
+.block .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
+.block input{padding:4px 6px;font-size:12px}
+.diff b{color:var(--bad)}
+.status{padding:10px;border-radius:8px;font-weight:600;margin-bottom:12px}
+.status.ok{background:var(--ok-soft)} .status.bad{background:var(--bad-soft)}
+</style>
+</head>
+<body>
+<header>
+  <h1><span id="coinName">Coin</span> Lab</h1>
+  <p>A working mini-blockchain built from scratch: hashing, proof of work, digital signatures.</p>
+</header>
+<nav>
+  <button data-tab="t1" class="on">1 · Coin generation</button>
+  <button data-tab="t2">2 · Mining</button>
+  <button data-tab="t3">3 · Peer-to-peer transfer</button>
+  <button data-tab="t4">Blockchain explorer</button>
+</nav>
+<main>
+
+<!-- TAB 1 -->
+<section id="t1" class="on">
+  <div class="grid">
+    <div class="card">
+      <h3>SHA-256: the math behind every ID</h3>
+      <p class="note">One-way function. Any input → a fixed 256-bit fingerprint. Change one character and the whole output changes.</p>
+      <label>Input</label>
+      <input id="hIn" value="Hello class">
+      <label>SHA-256 hash</label>
+      <div class="hash" id="hOut"></div>
+      <label>Same input with one character changed</label>
+      <div class="hash diff" id="hOut2"></div>
+      <p class="note" id="hBits"></p>
+    </div>
+    <div class="card">
+      <h3>Unique coin / transaction ID</h3>
+      <div class="formula">txId = SHA256( from + to + amount + timestamp )</div>
+      <p class="note">Because timestamp is in milliseconds and SHA-256 has 2<sup>256</sup> outputs, two IDs colliding is practically impossible.</p>
+      <button class="btn" id="genId">Generate a coin ID</button>
+      <div class="log" id="idLog" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Wallets = key pairs</h3>
+      <div class="formula">privateKey → (elliptic curve math) → publicKey<br>address = <span id="tk1"></span> + SHA256(publicKey)[0..40]</div>
+      <p class="note">Private key signs, public key verifies. You can't go backwards from public to private.</p>
+      <label>New wallet name</label>
+      <div class="row"><input id="wName" placeholder="e.g. Alice" style="flex:1"><button class="btn" id="wCreate" style="margin:0">Create</button></div>
+      <div id="wDetail" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Genesis block</h3>
+      <p class="note">Block #0 is hard-coded. Every later block points to the hash before it.</p>
+      <div class="formula">blockHash = SHA256( index + prevHash + timestamp + transactions + nonce )</div>
+      <div id="genesis" class="mono" style="margin-top:10px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TAB 2 -->
+<section id="t2">
+  <div class="grid">
+    <div class="card">
+      <h3>Proof of Work</h3>
+      <div class="formula">Find nonce such that SHA256(block + nonce) starts with <span id="zeroTxt"></span></div>
+      <label>Miner (reward goes to)</label>
+      <select id="miner"></select>
+      <label>Difficulty (leading zeros): <b id="dVal"></b></label>
+      <input type="range" id="diff" min="1" max="5">
+      <p class="note">Each extra zero ≈ 16× more work. That work is the cost of cheating.</p>
+      <div class="row"><button class="btn" id="mineBtn">⛏ Mine next block</button><button class="btn ghost" id="stopBtn" disabled>Stop</button></div>
+    </div>
+    <div class="card">
+      <h3>Live attempts</h3>
+      <label>Nonce</label><div class="big" id="mNonce">0</div>
+      <label>Current hash</label><div class="hash" id="mHash">—</div>
+      <label>Hash rate</label><div id="mRate" class="mono">—</div>
+      <div id="mResult" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h3>Balances (computed from the chain)</h3>
+      <p class="note">No one "stores" a balance. It's the sum of every transaction on the chain for that address.</p>
+      <div id="bal2"></div>
+    </div>
+    <div class="card">
+      <h3>Why it can't be copied</h3>
+      <p class="note">1. Coins only appear through a <b>coinbase</b> transaction inside a mined block.<br>
+      2. Each block contains the previous block's hash, so blocks are chained.<br>
+      3. Edit any old block → its hash changes → every later link breaks → you'd have to re-mine all of them faster than everyone else.<br>
+      Try it in the <b>Blockchain explorer</b> tab.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TAB 3 -->
+<section id="t3">
+  <div class="grid">
+    <div class="card">
+      <h3>Send coins</h3>
+      <label>From</label><select id="tFrom"></select>
+      <label>To</label><select id="tTo"></select>
+      <label>Amount</label><input id="tAmt" type="number" min="0" step="1" value="10">
+      <button class="btn" id="sendBtn">Sign &amp; broadcast</button>
+      <div id="tInfo" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Attack simulator</h3>
+      <p class="note">Watch the network reject each one.</p>
+      <div class="row">
+        <button class="btn danger" id="atkForge">Forge signature</button>
+        <button class="btn danger" id="atkTamper">Change amount after signing</button>
+        <button class="btn danger" id="atkOver">Spend more than balance</button>
+        <button class="btn danger" id="atkDouble">Double-spend (replay)</button>
+      </div>
+      <div class="log" id="atkLog" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Pending pool (mempool)</h3>
+      <p class="note">Valid transactions wait here until a miner puts them in a block.</p>
+      <div class="log" id="pool"></div>
+      <button class="btn" id="goMine">Go mine them →</button>
+    </div>
+    <div class="card">
+      <h3>Balances</h3>
+      <div id="bal3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TAB 4 -->
+<section id="t4">
+  <div id="chainStatus" class="status ok"></div>
+  <p class="note">Edit any transaction amount below to simulate a hacker rewriting history.</p>
+  <div class="chain" id="chain"></div>
+  <div class="row"><button class="btn ghost" id="repair">Undo tampering</button></div>
+</section>
+</main>
+
+<script>
+/* ============ CONFIG: change the coin name here ============ */
+const COIN = { name: "CoinName", ticker: "CNX", reward: 50, difficulty: 3 };
+
+/* ============ SHA-256 (implemented from scratch) ============ */
+const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+const H0 = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+const enc = new TextEncoder();
+const ror = (x, n) => (x >>> n) | (x << (32 - n));
+function sha256(str) {
+  const bytes = enc.encode(str), l = bytes.length;
+  const size = ((l + 9 + 63) >> 6) << 6;
+  const buf = new Uint8Array(size); buf.set(bytes); buf[l] = 0x80;
+  const dv = new DataView(buf.buffer);
+  dv.setUint32(size - 4, (l * 8) >>> 0); dv.setUint32(size - 8, Math.floor(l / 0x20000000));
+  const h = H0.slice(), w = new Uint32Array(64);
+  for (let i = 0; i < size; i += 64) {
+    for (let t = 0; t < 16; t++) w[t] = dv.getUint32(i + t * 4);
+    for (let t = 16; t < 64; t++) {
+      const a = w[t - 15], b = w[t - 2];
+      w[t] = w[t - 16] + (ror(a, 7) ^ ror(a, 18) ^ (a >>> 3)) + w[t - 7] + (ror(b, 17) ^ ror(b, 19) ^ (b >>> 10));
+    }
+    let [a, b, c, d, e, f, g, hh] = h;
+    for (let t = 0; t < 64; t++) {
+      const t1 = (hh + (ror(e, 6) ^ ror(e, 11) ^ ror(e, 25)) + ((e & f) ^ (~e & g)) + K[t] + w[t]) | 0;
+      const t2 = ((ror(a, 2) ^ ror(a, 13) ^ ror(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+      hh = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    h[0] = (h[0] + a) | 0; h[1] = (h[1] + b) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
+    h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + hh) | 0;
+  }
+  return h.map(x => (x >>> 0).toString(16).padStart(8, "0")).join("");
+}
+
+/* ============ Helpers ============ */
+const $ = id => document.getElementById(id);
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+const unhex = s => new Uint8Array(s.match(/../g).map(b => parseInt(b, 16)));
+const short = s => s.length > 20 ? s.slice(0, 10) + "…" + s.slice(-6) : s;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const logTo = (el, html) => { const d = document.createElement("div"); d.innerHTML = html; $(el).prepend(d); };
+
+/* ============ Wallets (ECDSA P-256 via Web Crypto) ============ */
+const wallets = []; // {name, address, pubHex, keys}
+const ALGO = { name: "ECDSA", namedCurve: "P-256" }, SIG = { name: "ECDSA", hash: "SHA-256" };
+async function createWallet(name) {
+  const keys = await crypto.subtle.generateKey(ALGO, true, ["sign", "verify"]);
+  const pubHex = hex(await crypto.subtle.exportKey("raw", keys.publicKey));
+  const jwk = await crypto.subtle.exportKey("jwk", keys.privateKey);
+  const w = { name, pubHex, privPreview: jwk.d, keys, address: COIN.ticker + sha256(pubHex).slice(0, 40) };
+  wallets.push(w); return w;
+}
+const byAddr = a => wallets.find(w => w.address === a);
+const label = a => a === "COINBASE" ? "⛏ COINBASE" : (byAddr(a)?.name || short(a));
+async function sign(w, msg) { return hex(await crypto.subtle.sign(SIG, w.keys.privateKey, enc.encode(msg))); }
+async function verify(pubHex, msg, sigHex) {
+  try {
+    const key = await crypto.subtle.importKey("raw", unhex(pubHex), ALGO, false, ["verify"]);
+    return await crypto.subtle.verify(SIG, key, unhex(sigHex), enc.encode(msg));
+  } catch { return false; }
+}
+
+/* ============ Transactions ============ */
+const txId = t => sha256(t.from + t.to + t.amount + t.timestamp);
+async function makeTx(fromW, to, amount) {
+  const t = { from: fromW.address, to, amount: Number(amount), timestamp: Date.now(), pubKey: fromW.pubHex };
+  t.id = txId(t); t.signature = await sign(fromW, t.id); return t;
+}
+function coinbaseTx(to) {
+  const t = { from: "COINBASE", to, amount: COIN.reward, timestamp: Date.now() };
+  t.id = txId(t); return t;
+}
+
+/* ============ Blockchain ============ */
+const blockHash = b => sha256(b.index + b.prevHash + b.timestamp + JSON.stringify(b.txs) + b.nonce);
+const chain = [];
+const pool = [];
+(function genesis() {
+  const b = { index: 0, prevHash: "0".repeat(64), timestamp: 1758153600000, txs: [], nonce: 0 };
+  b.hash = blockHash(b); chain.push(b);
+})();
+let original = null; // snapshot for "undo tampering"
+
+function balanceOf(addr, includePending = false) {
+  let bal = 0;
+  const txs = chain.flatMap(b => b.txs).concat(includePending ? pool : []);
+  for (const t of txs) { if (t.to === addr) bal += t.amount; if (t.from === addr) bal -= t.amount; }
+  return bal;
+}
+function validateChain() {
+  const bad = [];
+  for (let i = 0; i < chain.length; i++) {
+    const b = chain[i], reasons = [];
+    if (blockHash(b) !== b.hash) reasons.push("hash doesn't match contents");
+    if (i > 0 && b.prevHash !== chain[i - 1].hash) reasons.push("prevHash link broken");
+    if (i > 0 && !b.hash.startsWith("0".repeat(b.difficulty))) reasons.push("no valid proof of work");
+    for (const t of b.txs) if (txId(t) !== t.id) reasons.push("tx " + short(t.id) + " altered");
+    if (reasons.length) bad.push({ i, reasons });
+  }
+  return bad;
+}
+
+/* The network's rules for accepting a transaction */
+async function acceptTx(t) {
+  if (!(t.amount > 0)) return "amount must be positive";
+  if (txId(t) !== t.id) return "ID doesn't match contents (data was altered)";
+  if (sha256(t.pubKey).slice(0, 40) !== t.from.slice(COIN.ticker.length)) return "public key doesn't belong to sender address";
+  if (!(await verify(t.pubKey, t.id, t.signature))) return "invalid signature";
+  if (chain.some(b => b.txs.some(x => x.id === t.id)) || pool.some(x => x.id === t.id)) return "double-spend: this transaction was already used";
+  if (balanceOf(t.from, true) < t.amount) return "insufficient balance";
+  pool.push(t); return null;
+}
+
+/* ============ Mining ============ */
+let mining = false;
+async function mine(minerAddr) {
+  mining = true;
+  $("mineBtn").disabled = true; $("stopBtn").disabled = false; $("mResult").innerHTML = "";
+  const difficulty = +$("diff").value, target = "0".repeat(difficulty);
+  const prev = chain[chain.length - 1];
+  const b = { index: prev.index + 1, prevHash: prev.hash, timestamp: Date.now(),
+              txs: [coinbaseTx(minerAddr), ...pool], nonce: 0, difficulty };
+  const start = performance.now();
+  while (mining) {
+    for (let i = 0; i < 2000; i++) {
+      b.hash = blockHash(b);
+      if (b.hash.startsWith(target)) { mining = false; break; }
+      b.nonce++;
+    }
+    const secs = (performance.now() - start) / 1000;
+    $("mNonce").textContent = b.nonce.toLocaleString();
+    $("mHash").innerHTML = b.hash.startsWith(target)
+      ? `<span class="ok"><b>${target}</b>${b.hash.slice(difficulty)}</span>` : b.hash;
+    $("mRate").textContent = Math.round(b.nonce / Math.max(secs, 0.001)).toLocaleString() + " hashes/sec · " + secs.toFixed(2) + "s";
+    await new Promise(r => setTimeout(r, 0));
+  }
+  if (b.hash.startsWith(target)) {
+    chain.push(b); pool.length = 0; original = null;
+    $("mResult").innerHTML = `<div class="status ok">✅ Block #${b.index} mined after ${b.nonce.toLocaleString()} tries. ` +
+      `${COIN.reward} ${COIN.ticker} credited to ${esc(label(minerAddr))}.</div>`;
+  } else {
+    $("mResult").innerHTML = `<div class="status bad">Stopped. No block was added.</div>`;
+  }
+  $("mineBtn").disabled = false; $("stopBtn").disabled = true;
+  render();
+}
+
+/* ============ Rendering ============ */
+function renderBalances(el) {
+  $(el).innerHTML = wallets.map(w => {
+    const p = balanceOf(w.address, true) - balanceOf(w.address);
+    return `<div class="wallet"><div><b>${esc(w.name)}</b><div class="mono">${w.address}</div></div>
+      <div style="text-align:right"><b>${balanceOf(w.address)} ${COIN.ticker}</b>
+      ${p ? `<div class="note" style="margin:0">${p > 0 ? "+" : ""}${p} pending</div>` : ""}</div></div>`;
+  }).join("") || `<p class="note">No wallets yet.</p>`;
+}
+function renderSelects() {
+  const opts = wallets.map(w => `<option value="${w.address}">${esc(w.name)}</option>`).join("");
+  for (const id of ["miner", "tFrom", "tTo"]) { const v = $(id).value; $(id).innerHTML = opts; if (v) $(id).value = v; }
+  if ($("tFrom").value === $("tTo").value && wallets.length > 1) $("tTo").selectedIndex = 1;
+}
+function renderPool() {
+  $("pool").innerHTML = pool.map(t => `<div>${esc(label(t.from))} → ${esc(label(t.to))}: <b>${t.amount} ${COIN.ticker}</b><br>id ${short(t.id)} · sig ${short(t.signature)}</div>`).join("")
+    || `<div class="note">Empty</div>`;
+}
+function renderChain() {
+  const bad = validateChain(), badIdx = new Set(bad.map(x => x.i));
+  $("chainStatus").className = "status " + (bad.length ? "bad" : "ok");
+  $("chainStatus").innerHTML = bad.length
+    ? "❌ Chain INVALID: " + bad.map(x => `block #${x.i} (${x.reasons.join(", ")})`).join("; ")
+    : `✅ Chain valid · ${chain.length} blocks · every hash and link checks out`;
+  $("chain").innerHTML = chain.map((b, bi) => `
+    <div class="block ${badIdx.has(bi) ? "broken" : ""}">
+      <b>Block #${b.index}</b> ${b.index === 0 ? '<span class="pill">genesis</span>' : `<span class="pill">nonce ${b.nonce.toLocaleString()}</span>`}
+      <div class="k">prev hash</div><div class="mono">${short(b.prevHash)}</div>
+      <div class="k">stored hash</div><div class="mono">${short(b.hash)}</div>
+      <div class="k">recomputed hash</div><div class="mono ${blockHash(b) === b.hash ? "ok" : "bad"}">${short(blockHash(b))}</div>
+      <div class="k">transactions</div>
+      ${b.txs.map((t, ti) => `<div class="row mono" style="margin-top:4px">${esc(label(t.from))} → ${esc(label(t.to))}
+        <input type="number" value="${t.amount}" data-b="${bi}" data-t="${ti}" style="width:80px"></div>`).join("") || '<div class="note">none</div>'}
+    </div>`).join("");
+  $("chain").querySelectorAll("input").forEach(inp => inp.oninput = () => {
+    if (!original) original = JSON.stringify(chain);
+    chain[inp.dataset.b].txs[inp.dataset.t].amount = Number(inp.value);
+    renderChain(); renderBalances("bal2"); renderBalances("bal3");
+    $("chain").querySelector(`input[data-b="${inp.dataset.b}"][data-t="${inp.dataset.t}"]`).focus();
+  });
+}
+function render() { renderBalances("bal2"); renderBalances("bal3"); renderSelects(); renderPool(); renderChain(); }
+
+/* ============ Tab 1 wiring ============ */
+function updateHash() {
+  const v = $("hIn").value, h1 = sha256(v);
+  const v2 = v ? v.slice(0, -1) + String.fromCharCode(v.charCodeAt(v.length - 1) + 1) : "a";
+  const h2 = sha256(v2);
+  $("hOut").textContent = h1;
+  $("hOut2").innerHTML = `<span class="note">"${esc(v2)}"</span><br>` + [...h2].map((c, i) => c === h1[i] ? c : `<b>${c}</b>`).join("");
+  let diff = 0; for (let i = 0; i < 64; i++) diff += ((parseInt(h1[i], 16) ^ parseInt(h2[i], 16)).toString(2).match(/1/g) || []).length;
+  $("hBits").textContent = `${diff} of 256 bits flipped (~50% is expected: the "avalanche effect").`;
+}
+$("hIn").oninput = updateHash;
+$("genId").onclick = () => {
+  const [a, b] = wallets, t = { from: a.address, to: b.address, amount: 1 + Math.floor(Math.random() * 20), timestamp: Date.now() };
+  logTo("idLog", `SHA256(${a.name} + ${b.name} + ${t.amount} + ${t.timestamp})<br><b>${txId(t)}</b>`);
+};
+$("wCreate").onclick = async () => {
+  const name = $("wName").value.trim() || "Wallet " + (wallets.length + 1);
+  const w = await createWallet(name); $("wName").value = "";
+  showWallet(w); render();
+};
+function showWallet(w) {
+  $("wDetail").innerHTML = `<b>${esc(w.name)}</b>
+    <label>Private key (secret, never shared)</label><div class="hash">${w.privPreview}</div>
+    <label>Public key</label><div class="hash">${w.pubHex}</div>
+    <label>Address</label><div class="hash">${w.address}</div>`;
+}
+
+/* ============ Tab 2 wiring ============ */
+$("diff").value = COIN.difficulty;
+const updDiff = () => { $("dVal").textContent = $("diff").value; $("zeroTxt").textContent = '"' + "0".repeat($("diff").value) + '"'; };
+$("diff").oninput = updDiff;
+$("mineBtn").onclick = () => mine($("miner").value);
+$("stopBtn").onclick = () => { mining = false; };
+
+/* ============ Tab 3 wiring ============ */
+const walletOf = id => byAddr($(id).value);
+$("sendBtn").onclick = async () => {
+  const from = walletOf("tFrom"), to = $("tTo").value, amt = $("tAmt").value;
+  if (from.address === to) { $("tInfo").innerHTML = `<div class="status bad">Pick two different wallets.</div>`; return; }
+  const t = await makeTx(from, to, amt);
+  const err = await acceptTx(t);
+  $("tInfo").innerHTML = `<label>1. Transaction ID = SHA256(from+to+amount+time)</label><div class="hash">${t.id}</div>
+    <label>2. Signed with ${esc(from.name)}'s private key</label><div class="hash">${t.signature}</div>
+    <label>3. Network verifies with public key</label>` +
+    (err ? `<div class="status bad">❌ Rejected: ${err}</div>` : `<div class="status ok">✅ Verified, added to pending pool</div>`);
+  window.lastTx = t; render();
+};
+async function attack(name, build) {
+  const [a, b] = [walletOf("tFrom"), $("tTo").value];
+  const t = await build(a, b), err = await acceptTx(t);
+  logTo("atkLog", `<b>${name}</b>: ` + (err ? `<span class="ok">blocked. ${err}</span>` : `<span class="bad">accepted?!</span>`));
+  render();
+}
+$("atkForge").onclick = () => attack("Forged signature", async (a, b) => {
+  const thief = wallets.find(w => w !== a); const t = await makeTx(a, b, 1);
+  t.signature = await sign(thief, t.id); return t; // signed with someone else's key
+});
+$("atkTamper").onclick = () => attack("Amount changed after signing", async (a, b) => {
+  const t = await makeTx(a, b, 1); t.amount = 1000; return t;
+});
+$("atkOver").onclick = () => attack("Overspend", (a, b) => makeTx(a, b, balanceOf(a.address, true) + 1000));
+$("atkDouble").onclick = () => attack("Replay of last transaction", async (a, b) => {
+  const last = window.lastTx || chain.flatMap(x => x.txs).reverse().find(t => t.from !== "COINBASE");
+  if (!last) return makeTx(a, b, 0);
+  return { ...last };
+});
+$("goMine").onclick = () => document.querySelector('nav button[data-tab="t2"]').click();
+
+/* ============ Tab 4 wiring ============ */
+$("repair").onclick = () => {
+  if (original) { chain.splice(0, chain.length, ...JSON.parse(original)); original = null; }
+  render();
+};
+
+/* ============ Tabs + boot ============ */
+document.querySelectorAll("nav button").forEach(btn => btn.onclick = () => {
+  document.querySelectorAll("nav button, section").forEach(e => e.classList.remove("on"));
+  btn.classList.add("on"); $(btn.dataset.tab).classList.add("on");
+  if (btn.dataset.tab === "t4") renderChain();
+});
+(async function boot() {
+  document.title = COIN.name + " Lab";
+  $("coinName").textContent = COIN.name; $("tk1").textContent = '"' + COIN.ticker + '"';
+  const g = chain[0];
+  $("genesis").innerHTML = `index: 0<br>prevHash: ${g.prevHash}<br>timestamp: ${g.timestamp}<br>hash: <b>${g.hash}</b>`;
+  for (const n of ["Alice", "Bob", "Charlie"]) await createWallet(n);
+  showWallet(wallets[0]); updateHash(); updDiff(); render();
+})();
+</script>
+</body>
+</html>
