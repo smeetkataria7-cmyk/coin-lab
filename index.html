@@ -18,31 +18,38 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--sans);min-height:100vh;overflow-x:hidden}
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg)}
 .bg i{position:absolute;width:50vmax;height:50vmax;border-radius:50%;filter:blur(100px);opacity:.25;animation:float 20s ease-in-out infinite alternate}
 .bg i:nth-child(1){background:var(--violet);top:-20vmax;left:-15vmax}
 .bg i:nth-child(2){background:var(--pink);bottom:-25vmax;right:-15vmax;animation-delay:-8s}
 @keyframes float{to{transform:translate(5vmax,4vmax) scale(1.12)}}
-#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:70}
 
 /* header */
-header{max-width:1120px;margin:auto;padding:28px 18px 18px}
-.logo{font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:0}
+header{max-width:1120px;margin:auto;padding:24px 18px 16px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.logo{font-size:clamp(30px,6vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:0}
 .grad{background:linear-gradient(90deg,var(--lime),var(--cyan) 50%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
-.tag{color:var(--muted);margin:10px 0 16px;font-size:clamp(15px,2.4vw,17px)}
+.tag{color:var(--muted);margin:10px 0 14px;font-size:clamp(15px,2.4vw,17px)}
+.me{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 5px}
+.me b{display:block;line-height:1.15;font-size:14px}.me small{color:var(--lime);font-family:var(--mono);font-size:12px;display:block;line-height:1.1}
+.me button{background:var(--card2);color:var(--text);border:0;border-radius:999px;padding:8px 14px;cursor:pointer;font:500 13px var(--sans)}
+.me button:hover{background:rgba(255,255,255,.15)}
 .stats{display:flex;gap:8px;flex-wrap:wrap}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--muted)}
 .stat b{color:var(--text);font-family:var(--mono);margin-left:6px}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;box-shadow:0 0 0 0 var(--ok);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px transparent}}
 
-/* proper tab bar */
+/* tab bar */
 .tabbar{position:sticky;top:0;z-index:30;background:rgba(10,10,15,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .tabs{max-width:1120px;margin:auto;padding:0 18px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{position:relative;flex:0 0 auto;background:none;border:0;color:var(--muted);font:500 15px var(--sans);padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:color .2s;white-space:nowrap}
 .tab .num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--mono);border:1px solid var(--line);transition:.2s}
-.tab:hover{color:var(--text)}
-.tab[aria-selected=true]{color:var(--text)}
+.tab:hover,.tab[aria-selected=true]{color:var(--text)}
 .tab[aria-selected=true] .num{background:var(--lime);color:#0a0a10;border-color:var(--lime)}
 .tab::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,var(--lime),var(--cyan));transform:scaleX(0);transition:transform .25s}
 .tab[aria-selected=true]::after{transform:scaleX(1)}
@@ -68,7 +75,7 @@ code,.mono{font-family:var(--mono);font-size:12.5px}
 .hash .z{color:var(--lime);font-weight:600;text-shadow:0 0 12px rgba(200,255,61,.7)}
 .hash .d{color:var(--pink);font-weight:600}
 .lbl{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
-input[type=text],input[type=number]{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:11px 13px;font:inherit;outline:none;transition:.2s}
+input:not([type=checkbox]){width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:11px 13px;font:inherit;outline:none;transition:.2s}
 input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .btn{background:linear-gradient(135deg,var(--lime),var(--cyan));color:#0a0a10;border:0;border-radius:12px;padding:12px 20px;font:700 15px var(--sans);cursor:pointer;transition:.15s;margin-top:14px}
 .btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(61,240,255,.3)}
@@ -80,7 +87,7 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .btn.hack:hover{background:rgba(255,79,163,.12);box-shadow:none}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-/* wallet chips */
+/* chips */
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:5px 14px 5px 5px;cursor:pointer;font:inherit;text-align:left;transition:.15s}
 .chip:hover{background:var(--card2)}
@@ -90,24 +97,22 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .av{width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px;flex:none;
     background:linear-gradient(135deg,hsl(var(--h) 85% 55%),hsl(calc(var(--h) + 60) 85% 45%))}
 .av.lg{width:50px;height:50px;font-size:26px}
+.av.sm{width:30px;height:30px;font-size:16px}
 
 /* leaderboard */
 .lb{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .lb:last-child{border:0}
+.lb.you{background:rgba(200,255,61,.07);margin:0 -10px;padding:10px;border-radius:12px;border-bottom-color:transparent}
 .lb .n{flex:1;min-width:0}.lb .n b{display:block}.lb .n span{color:var(--muted);font-family:var(--mono);font-size:11px;word-break:break-all}
 .lb .amt{font:700 20px var(--mono);text-align:right}.lb .amt small{display:block;font-size:11px;color:var(--cyan);font-weight:400}
-.rank{width:18px;color:var(--muted);font-family:var(--mono);font-size:13px}
+.rank{width:22px;color:var(--muted);font-family:var(--mono);font-size:13px}
 
 .secret{filter:blur(7px);cursor:pointer;transition:.3s;user-select:none}
 .secret.show{filter:none;user-select:text}
-
-/* difficulty */
-.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.seg button{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:9px 2px;cursor:pointer;font:inherit;font-size:12px;transition:.15s}
-.seg button b{display:block;font:600 13px var(--mono);margin-bottom:1px}
-.seg button.on{border-color:var(--pink);background:rgba(255,79,163,.15)}
 .toggle{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px;margin-top:14px;cursor:pointer}
 .toggle input{accent-color:var(--lime);width:18px;height:18px}
+.balbig{font:700 clamp(34px,7vw,46px)/1 var(--mono);letter-spacing:-.03em}
+.balbig small{font-size:16px;color:var(--muted);font-weight:400}
 
 /* mining live */
 .slot{font:700 clamp(34px,8vw,52px)/1 var(--mono);letter-spacing:-.03em;background:linear-gradient(90deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -128,11 +133,12 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .step div{min-width:0}.step small{display:block;color:var(--muted);font-size:13px}
 .step code{display:block;word-break:break-all;color:var(--cyan);margin-top:2px}
 
-.list{max-height:260px;overflow:auto}
+.list{max-height:280px;overflow:auto}
 .list>div{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;animation:in .3s}
 .list>div:last-child{border:0}
 .list code{color:var(--cyan);word-break:break-all}
 .empty{color:var(--muted);font-size:14px;padding:6px 0}
+.who{color:var(--lime);font-weight:600}
 
 /* explorer */
 .status{border-radius:16px;padding:14px 18px;font-weight:600;margin-bottom:16px}
@@ -142,7 +148,7 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .chain{display:flex;align-items:stretch;overflow-x:auto;padding:6px 2px 16px}
 .blk{flex:0 0 min(300px,80vw);background:var(--card);border:1.5px solid rgba(77,255,166,.5);border-radius:18px;padding:14px;min-width:0}
 .blk.broken{border-color:var(--bad);background:rgba(255,84,104,.08);animation:shake .4s}
-.blk .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.blk .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .pill{font:600 11px var(--mono);border-radius:99px;padding:3px 9px;background:rgba(139,92,255,.25);color:#d9ccff}
 .blk .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:10px}
 .blk .why{color:#ff98a4;font-size:12px;margin-top:10px}
@@ -152,7 +158,22 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .link{flex:0 0 40px;display:grid;place-items:center;font-size:18px}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
 
-#toasts{position:fixed;top:14px;right:14px;z-index:60;display:flex;flex-direction:column;gap:8px;max-width:calc(100vw - 28px)}
+/* auth overlay */
+.overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;overflow:auto;background:rgba(10,10,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.authcard{width:min(440px,100%);background:rgba(20,20,30,.9);border:1px solid var(--line);border-radius:24px;padding:28px}
+.authcard .logo{font-size:36px;margin-bottom:6px}
+.mode{display:grid;grid-template-columns:1fr 1fr;background:rgba(0,0,0,.35);border-radius:12px;padding:4px;margin:16px 0}
+.mode button{background:none;border:0;color:var(--muted);padding:9px;border-radius:9px;font:600 14px var(--sans);cursor:pointer}
+.mode button.on{background:var(--card2);color:var(--text)}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1f1f1f;border:0;border-radius:12px;padding:12px;font:600 15px var(--sans);cursor:pointer}
+.gbtn:hover{background:#f0f0f0}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:16px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.field{margin-bottom:10px}
+.linkbtn{background:none;border:0;color:var(--cyan);cursor:pointer;font:inherit;font-size:13px;padding:0;margin-top:10px}
+.msg{font-size:14px;margin-top:12px;min-height:20px}
+
+#toasts{position:fixed;top:14px;right:14px;z-index:80;display:flex;flex-direction:column;gap:8px;max-width:calc(100vw - 28px)}
 .toast{background:rgba(20,20,30,.96);border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:12px;padding:12px 16px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:slide .35s cubic-bezier(.2,1.4,.4,1)}
 .toast.bad{border-left-color:var(--bad)}
 @keyframes slide{from{transform:translateX(120%)}}
@@ -164,11 +185,53 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 
+<!-- LOGIN / SIGN UP -->
+<div class="overlay" id="auth">
+  <div class="authcard">
+    <h1 class="logo"><span class="grad coinName">Coin</span> <span style="font-weight:400;color:var(--muted)">Lab</span></h1>
+    <p class="hint" id="authSub">Create an account to get your own wallet and join the live network.</p>
+
+    <div class="banner bad" id="setupWarn" hidden style="margin:0 0 14px">Firebase isn't connected yet. Paste your config into <code>firebase-config.js</code> to turn on accounts.</div>
+
+    <div id="authMain">
+      <div class="mode" id="mode"><button data-m="signup" class="on">Sign up</button><button data-m="login">Log in</button></div>
+      <button class="gbtn" id="gBtn" type="button">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="or">or use email</div>
+      <form id="authForm" autocomplete="on">
+        <div class="field" id="fUser"><input type="text" id="aUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+        <div class="field"><input type="email" id="aEmail" placeholder="Email" autocomplete="email" required></div>
+        <div class="field"><input type="password" id="aPass" placeholder="Password (6+ characters)" autocomplete="current-password" required></div>
+        <button class="btn big" id="aSubmit" type="submit" style="margin-top:6px">Create account</button>
+        <button class="linkbtn" id="aForgot" type="button" hidden>Forgot password?</button>
+      </form>
+    </div>
+
+    <!-- shown after first Google sign-in (or if the username step failed) -->
+    <form id="profileForm" hidden>
+      <p class="hint">One last step. Pick a username. We'll generate your wallet keys in your browser.</p>
+      <div class="field"><input type="text" id="pUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocapitalize="none" spellcheck="false"></div>
+      <button class="btn big" id="pSubmit" type="submit" style="margin-top:6px">Create my wallet</button>
+      <button class="linkbtn" id="pLogout" type="button">Use a different account</button>
+    </form>
+    <div class="msg" id="authMsg"></div>
+  </div>
+</div>
+
 <header>
-  <h1 class="logo"><span class="grad" id="coinName">Coin</span> <span style="font-weight:400;color:var(--muted)">Lab</span></h1>
-  <p class="tag">Build your own money from scratch. No bank, no middleman.</p>
+  <div class="top">
+    <div>
+      <h1 class="logo"><span class="grad coinName">Coin</span> <span style="font-weight:400;color:var(--muted)">Lab</span></h1>
+      <p class="tag">Build your own money from scratch. No bank, no middleman.</p>
+    </div>
+    <div class="me" id="meChip" hidden></div>
+  </div>
   <div class="stats">
+    <div class="stat"><span class="live"></span>Live network</div>
     <div class="stat">Blocks<b id="sBlocks">1</b></div>
+    <div class="stat">Users<b id="sUsers">0</b></div>
     <div class="stat">Coins in existence<b id="sSupply">0</b></div>
     <div class="stat">Waiting to be mined<b id="sPending">0</b></div>
   </div>
@@ -179,7 +242,7 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     <button class="tab" role="tab" id="tab-t1" aria-controls="t1" aria-selected="true" data-tab="t1"><span class="num">1</span>Mint</button>
     <button class="tab" role="tab" id="tab-t2" aria-controls="t2" aria-selected="false" data-tab="t2" tabindex="-1"><span class="num">2</span>Mine</button>
     <button class="tab" role="tab" id="tab-t3" aria-controls="t3" aria-selected="false" data-tab="t3" tabindex="-1"><span class="num">3</span>Send</button>
-    <button class="tab" role="tab" id="tab-t4" aria-controls="t4" aria-selected="false" data-tab="t4" tabindex="-1"><span class="num">4</span>Hack it</button>
+    <button class="tab" role="tab" id="tab-t4" aria-controls="t4" aria-selected="false" data-tab="t4" tabindex="-1"><span class="num">4</span>Ledger</button>
   </div>
 </div>
 
@@ -202,6 +265,13 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     </div>
 
     <div class="card">
+      <h3>Your wallet</h3>
+      <div class="formula">private key → (elliptic-curve math) → public key<br>address = "<span class="tk"></span>" + SHA256(public key)[0..40]</div>
+      <p class="hint">Private key = your signature stamp. Public key = how others check it's really you. You can't go backwards from public to private.</p>
+      <div id="wDetail"></div>
+    </div>
+
+    <div class="card">
       <h3>Unique coin IDs</h3>
       <div class="formula">id = SHA256( from + to + amount + timestamp )</div>
       <p class="hint">There are 2<sup>256</sup> possible IDs, more than the number of atoms in the Milky Way, so two coins never share one.</p>
@@ -210,19 +280,9 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     </div>
 
     <div class="card">
-      <h3>Wallets are key pairs</h3>
-      <div class="formula">private key → (elliptic-curve math) → public key<br>address = "<span id="tk1"></span>" + SHA256(public key)[0..40]</div>
-      <p class="hint">Private key = your signature stamp. Public key = how others check it's really you. You can't go backwards from public to private.</p>
-      <div class="chips" id="viewChips"></div>
-      <div id="wDetail"></div>
-      <label class="lbl">Make your own wallet</label>
-      <div class="row"><input type="text" id="wName" placeholder="your name / handle" style="flex:1;min-width:140px" autocomplete="off" maxlength="16"><button class="btn" id="wCreate" style="margin:0">Create</button></div>
-    </div>
-
-    <div class="card">
       <h3>Block #0: the genesis block</h3>
       <p class="hint">Every chain starts with a hard-coded first block. Every later block stores the hash of the one before it, so they're welded together.</p>
-      <div class="formula">blockHash = SHA256( index + prevHash + time + transactions + nonce )</div>
+      <div class="formula">blockHash = SHA256( index + prevHash + time + transactions + nonce + miner )</div>
       <div class="hash" id="genesis"></div>
     </div>
   </div>
@@ -231,14 +291,12 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 <!-- 2 MINE -->
 <section id="t2" role="tabpanel" aria-labelledby="tab-t2">
   <p class="intro">Mining is a guessing game with a real cost</p>
-  <p class="sub">To add a block, find a nonce (a random number) that makes the block's hash start with zeros. There's no shortcut, so you guess millions of times. Win and you get paid.</p>
+  <p class="sub">To add a block, find a nonce (a random number) that makes the block's hash start with zeros. There's no shortcut, so you guess. The first classmate to find one wins the reward, and everyone's screen updates instantly.</p>
   <div class="grid">
     <div class="card">
-      <h3>Set up your rig</h3>
-      <label class="lbl" style="margin-top:8px">Who gets the reward?</label>
-      <div class="chips" id="minerChips"></div>
-      <label class="lbl">Difficulty (each level is about 16× more guesses)</label>
-      <div class="seg" id="seg"></div>
+      <h3>Your mining rig</h3>
+      <p class="hint" id="mineSub">Reward goes to your wallet.</p>
+      <div class="formula">Goal: SHA256(block + nonce) starts with "<span id="zeroTxt"></span>"</div>
       <label class="toggle"><input type="checkbox" id="slow"> Slow motion, so the class can watch each guess</label>
       <button class="btn big" id="mineBtn">⛏️ Start mining</button>
       <button class="btn ghost" id="stopBtn" disabled style="width:100%;margin-top:8px">Stop</button>
@@ -246,7 +304,6 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 
     <div class="card">
       <h3>Live guesses</h3>
-      <div class="formula">Goal: SHA256(block + nonce) starts with "<span id="zeroTxt"></span>"</div>
       <span class="lbl" style="margin-top:0">Nonce</span><div class="slot" id="mNonce">0</div>
       <span class="lbl">Latest hash</span><div class="hash" id="mHash">Press start…</div>
       <div class="bar"><i id="mBar"></i></div>
@@ -261,11 +318,17 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     </div>
 
     <div class="card">
+      <h3>Latest blocks</h3>
+      <p class="hint">Blocks found by anyone on the network show up here live.</p>
+      <div class="list" id="recent"></div>
+    </div>
+
+    <div class="card wide" style="grid-column:1/-1">
       <h3>Why can't a coin be copied?</h3>
       <div class="steps" style="margin-top:6px">
         <div class="step" style="--d:0s"><i>1</i><div><b>Coins only appear by mining</b><small>The only "create money" transaction is the miner's reward, inside a block that took real work.</small></div></div>
         <div class="step" style="--d:.15s"><i>2</i><div><b>Blocks are chained</b><small>Each block contains the previous block's hash.</small></div></div>
-        <div class="step" style="--d:.3s"><i>3</i><div><b>Editing history breaks everything</b><small>Change one old block and every block after it becomes invalid. You'd have to re-mine them all. Try it in the <b>Hack it</b> tab.</small></div></div>
+        <div class="step" style="--d:.3s"><i>3</i><div><b>Editing history breaks everything</b><small>Change one old block and every block after it becomes invalid. You'd have to re-mine them all. Try it in the <b>Ledger</b> tab.</small></div></div>
       </div>
     </div>
   </div>
@@ -278,8 +341,10 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
   <div class="grid">
     <div class="card">
       <h3>Send coins</h3>
-      <label class="lbl" style="margin-top:8px">From</label><div class="chips" id="fromChips"></div>
-      <label class="lbl">To</label><div class="chips" id="toChips"></div>
+      <span class="lbl" style="margin-top:8px">Your balance</span><div class="balbig" id="myBal">0 <small class="tk"></small></div>
+      <label class="lbl">To</label>
+      <input type="text" id="toSearch" placeholder="Search a username…" autocomplete="off" autocapitalize="none">
+      <div class="chips" id="toChips" style="margin-top:10px"></div>
       <label class="lbl">Amount</label>
       <input type="number" id="tAmt" min="1" step="1" value="10" inputmode="numeric">
       <div class="row" style="margin-top:8px" id="quick"></div>
@@ -289,7 +354,7 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 
     <div class="card">
       <h3>Try to cheat the network</h3>
-      <p class="hint">Pick a sender on the left, then attack. Every attempt gets rejected for a different reason.</p>
+      <p class="hint">Pick a receiver on the left, then attack. These run against the network's real rules, but nothing is sent.</p>
       <button class="btn hack" id="atkForge" style="margin-top:0">Forge a signature</button>
       <button class="btn hack" id="atkTamper">Edit after signing</button>
       <button class="btn hack" id="atkOver">Spend more than I have</button>
@@ -305,385 +370,25 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     </div>
 
     <div class="card">
-      <h3>Balances</h3>
-      <div id="bal3"></div>
+      <h3>Recent payments</h3>
+      <p class="hint">Confirmed transactions from the whole class.</p>
+      <div class="list" id="feed"></div>
     </div>
   </div>
 </section>
 
-<!-- 4 HACK -->
+<!-- 4 LEDGER -->
 <section id="t4" role="tabpanel" aria-labelledby="tab-t4">
   <p class="intro">Boss level: rewrite history</p>
-  <p class="sub">Change any amount below to steal coins in the past. Watch what happens to the chain.</p>
+  <p class="sub">This is your browser's own copy of the ledger. Change any amount to steal coins in the past, then watch your copy break. The real network never sees your edits.</p>
   <div id="chainStatus" class="status ok"></div>
   <div class="chain" id="chain"></div>
-  <button class="btn ghost" id="repair" style="margin-top:6px">Undo my crimes</button>
+  <div class="row"><button class="btn ghost" id="repair" style="margin-top:6px">Undo my crimes</button>
+  <span class="hint" id="forkNote" style="margin:8px 0 0"></span></div>
 </section>
 </main>
-<footer>Everything runs in your browser. No servers, no real money. Refresh to start a new chain.</footer>
+<footer>Accounts by Firebase. Balances come from the shared blockchain, not from any server.</footer>
 
-<script>
-/* ============ CONFIG: change the coin name here ============ */
-const COIN = { name: "VibeCoin", ticker: "VIBE", reward: 50, difficulty: 4 };
-
-/* ============ SHA-256 (implemented from scratch) ============ */
-const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
-0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
-0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
-0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
-0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
-0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
-0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
-0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
-const H0 = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
-const enc = new TextEncoder();
-const ror = (x, n) => (x >>> n) | (x << (32 - n));
-function sha256(str) {
-  const bytes = enc.encode(str), l = bytes.length;
-  const size = ((l + 9 + 63) >> 6) << 6;
-  const buf = new Uint8Array(size); buf.set(bytes); buf[l] = 0x80;
-  const dv = new DataView(buf.buffer);
-  dv.setUint32(size - 4, (l * 8) >>> 0); dv.setUint32(size - 8, Math.floor(l / 0x20000000));
-  const h = H0.slice(), w = new Uint32Array(64);
-  for (let i = 0; i < size; i += 64) {
-    for (let t = 0; t < 16; t++) w[t] = dv.getUint32(i + t * 4);
-    for (let t = 16; t < 64; t++) {
-      const a = w[t - 15], b = w[t - 2];
-      w[t] = w[t - 16] + (ror(a, 7) ^ ror(a, 18) ^ (a >>> 3)) + w[t - 7] + (ror(b, 17) ^ ror(b, 19) ^ (b >>> 10));
-    }
-    let [a, b, c, d, e, f, g, hh] = h;
-    for (let t = 0; t < 64; t++) {
-      const t1 = (hh + (ror(e, 6) ^ ror(e, 11) ^ ror(e, 25)) + ((e & f) ^ (~e & g)) + K[t] + w[t]) | 0;
-      const t2 = ((ror(a, 2) ^ ror(a, 13) ^ ror(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
-      hh = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
-    }
-    h[0] = (h[0] + a) | 0; h[1] = (h[1] + b) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
-    h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + hh) | 0;
-  }
-  return h.map(x => (x >>> 0).toString(16).padStart(8, "0")).join("");
-}
-
-/* ============ Helpers ============ */
-const $ = id => document.getElementById(id);
-const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
-const unhex = s => new Uint8Array(s.match(/../g).map(b => parseInt(b, 16)));
-const short = s => s.length > 20 ? s.slice(0, 10) + "…" + s.slice(-6) : s;
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const raf = typeof requestAnimationFrame === "function" ? requestAnimationFrame : f => setTimeout(f, 0);
-const S = { view: null, miner: null, from: null, to: null, diff: COIN.difficulty, slow: false };
-const LEVELS = ["Baby", "Easy", "Medium", "Spicy", "Brutal"];
-
-function toast(msg, bad) {
-  const d = document.createElement("div"); d.className = "toast" + (bad ? " bad" : ""); d.textContent = msg;
-  $("toasts").appendChild(d); setTimeout(() => d.remove(), 3200);
-}
-function confetti() {
-  const c = $("fx"), x = c.getContext("2d"); c.width = innerWidth; c.height = innerHeight;
-  const cols = ["#c8ff3d", "#3df0ff", "#ff4fa3", "#8b5cff", "#ffffff"];
-  const ps = Array.from({ length: 150 }, () => ({ x: innerWidth / 2, y: innerHeight * .42, vx: (Math.random() - .5) * 18,
-    vy: -Math.random() * 15 - 4, r: 4 + Math.random() * 5, c: cols[Math.random() * cols.length | 0], rot: Math.random() * 6 }));
-  let f = 0;
-  (function step() {
-    x.clearRect(0, 0, c.width, c.height);
-    for (const p of ps) { p.vy += .38; p.x += p.vx; p.y += p.vy; p.rot += .2;
-      x.save(); x.translate(p.x, p.y); x.rotate(p.rot); x.fillStyle = p.c; x.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); x.restore(); }
-    if (++f < 110) raf(step); else x.clearRect(0, 0, c.width, c.height);
-  })();
-}
-
-/* ============ Wallets (ECDSA P-256 via Web Crypto) ============ */
-const wallets = [];
-const AVATARS = ["😎", "🫶", "😈", "🦄", "🐸", "👾", "🔥", "🤖", "🍕", "🧃", "👻", "🐙"];
-const ALGO = { name: "ECDSA", namedCurve: "P-256" }, SIG = { name: "ECDSA", hash: "SHA-256" };
-async function createWallet(name, avatar) {
-  const keys = await crypto.subtle.generateKey(ALGO, true, ["sign", "verify"]);
-  const pubHex = hex(await crypto.subtle.exportKey("raw", keys.publicKey));
-  const jwk = await crypto.subtle.exportKey("jwk", keys.privateKey);
-  const address = COIN.ticker + sha256(pubHex).slice(0, 40);
-  const w = { name, pubHex, priv: jwk.d, keys, address, avatar: avatar || AVATARS[wallets.length % AVATARS.length],
-              hue: parseInt(address.slice(-4), 16) % 360 };
-  wallets.push(w); return w;
-}
-const byAddr = a => wallets.find(w => w.address === a);
-const label = a => a === "COINBASE" ? "Mining reward" : (byAddr(a)?.name || short(a));
-const av = (w, cls = "") => `<span class="av ${cls}" style="--h:${w.hue}">${w.avatar}</span>`;
-async function sign(w, msg) { return hex(await crypto.subtle.sign(SIG, w.keys.privateKey, enc.encode(msg))); }
-async function verify(pubHex, msg, sigHex) {
-  try {
-    const key = await crypto.subtle.importKey("raw", unhex(pubHex), ALGO, false, ["verify"]);
-    return await crypto.subtle.verify(SIG, key, unhex(sigHex), enc.encode(msg));
-  } catch { return false; }
-}
-
-/* ============ Transactions ============ */
-const txId = t => sha256(t.from + t.to + t.amount + t.timestamp);
-async function makeTx(fromW, to, amount) {
-  const t = { from: fromW.address, to, amount: Number(amount), timestamp: Date.now(), pubKey: fromW.pubHex };
-  t.id = txId(t); t.signature = await sign(fromW, t.id); return t;
-}
-function coinbaseTx(to) {
-  const t = { from: "COINBASE", to, amount: COIN.reward, timestamp: Date.now() };
-  t.id = txId(t); return t;
-}
-
-/* ============ Blockchain ============ */
-const blockHash = b => sha256(b.index + b.prevHash + b.timestamp + JSON.stringify(b.txs) + b.nonce);
-const chain = [], pool = [];
-(function genesis() {
-  const b = { index: 0, prevHash: "0".repeat(64), timestamp: 1758153600000, txs: [], nonce: 0 };
-  b.hash = blockHash(b); chain.push(b);
-})();
-let original = null;
-
-function balanceOf(addr, includePending = false) {
-  let bal = 0;
-  const txs = chain.flatMap(b => b.txs).concat(includePending ? pool : []);
-  for (const t of txs) { if (t.to === addr) bal += t.amount; if (t.from === addr) bal -= t.amount; }
-  return bal;
-}
-/* returns [{i, reasons[]}]; every block after the first broken one is invalid too */
-function validateChain() {
-  const bad = []; let firstBad = -1;
-  for (let i = 0; i < chain.length; i++) {
-    const b = chain[i], reasons = [];
-    if (blockHash(b) !== b.hash) reasons.push("its contents no longer match its hash");
-    if (i > 0 && b.prevHash !== blockHash(chain[i - 1])) reasons.push("the block before it was changed");
-    if (i > 0 && !b.hash.startsWith("0".repeat(b.difficulty))) reasons.push("proof of work missing");
-    for (const t of b.txs) if (txId(t) !== t.id) reasons.push("a transaction was altered");
-    if (reasons.length && firstBad < 0) firstBad = i;
-    if (!reasons.length && firstBad >= 0) reasons.push("it's built on broken block #" + firstBad);
-    if (reasons.length) bad.push({ i, reasons });
-  }
-  return bad;
-}
-async function acceptTx(t) {
-  if (!(t.amount > 0)) return "amount must be positive";
-  if (txId(t) !== t.id) return "the ID doesn't match the contents, so it was edited after signing";
-  if (sha256(t.pubKey).slice(0, 40) !== t.from.slice(COIN.ticker.length)) return "that public key doesn't belong to the sender's address";
-  if (!(await verify(t.pubKey, t.id, t.signature))) return "invalid signature: not signed by the sender's private key";
-  if (chain.some(b => b.txs.some(x => x.id === t.id)) || pool.some(x => x.id === t.id)) return "double-spend: this exact transaction was already used";
-  if (balanceOf(t.from, true) < t.amount) return "not enough coins (balance too low)";
-  pool.push(t); return null;
-}
-
-/* ============ Mining ============ */
-let mining = false;
-async function mine(minerAddr) {
-  if (mining) return;
-  mining = true; setMineUI(true);
-  const d = S.diff, target = "0".repeat(d), prev = chain[chain.length - 1], expected = 16 ** d;
-  const b = { index: prev.index + 1, prevHash: prev.hash, timestamp: Date.now(),
-              txs: [coinbaseTx(minerAddr), ...pool], nonce: 0, difficulty: d };
-  const t0 = performance.now(); let found = false;
-  while (mining && !found) {
-    const fs = performance.now(); let n = 0;
-    do {
-      b.hash = blockHash(b); n++;
-      if (b.hash.startsWith(target)) { found = true; break; }
-      b.nonce++;
-    } while (S.slow ? n < 25 : performance.now() - fs < 12);
-    const secs = Math.max((performance.now() - t0) / 1000, .001);
-    $("mNonce").textContent = (b.nonce + (found ? 1 : 0)).toLocaleString();
-    $("mHash").innerHTML = hashHtml(b.hash);
-    $("mBar").style.width = Math.min(100, b.nonce / expected * 100) + "%";
-    $("mRate").textContent = Math.round(b.nonce / secs).toLocaleString() + " guesses/sec · " + secs.toFixed(1) + "s · on average ~" + expected.toLocaleString() + " guesses needed";
-    await new Promise(r => raf(r));
-  }
-  mining = false;
-  if (found) {
-    chain.push(b); pool.length = 0; original = null;
-    $("mBar").style.width = "100%";
-    $("mResult").innerHTML = `<div class="banner ok">🎉 Block #${b.index} mined after ${(b.nonce + 1).toLocaleString()} guesses! ${COIN.reward} ${COIN.ticker} sent to ${esc(label(minerAddr))}.</div>`;
-    toast(`+${COIN.reward} ${COIN.ticker} → ${label(minerAddr)}`); confetti();
-  } else {
-    $("mResult").innerHTML = `<div class="banner bad">Stopped. No block, no reward.</div>`;
-  }
-  setMineUI(false); render();
-}
-function setMineUI(on) {
-  $("mineBtn").disabled = on; $("stopBtn").disabled = !on;
-  $("mineBtn").textContent = on ? "⛏️ Mining…" : "⛏️ Start mining";
-  $("mineBtn").classList.toggle("pulse", on);
-  if (on) { $("mResult").innerHTML = ""; $("mBar").style.width = "0"; }
-}
-function hashHtml(h) {
-  const z = h.match(/^0*/)[0].length;
-  return z ? `<span class="z">${h.slice(0, z)}</span>${h.slice(z)}` : h;
-}
-
-/* ============ Rendering ============ */
-function chipsHtml(key, withBal) {
-  return wallets.map(w => `<button class="chip ${S[key] === w.address ? "on" : ""}" data-k="${key}" data-a="${w.address}">
-    ${av(w)}<span><b>${esc(w.name)}</b>${withBal ? `<small>${balanceOf(w.address)} ${COIN.ticker}</small>` : ""}</span></button>`).join("");
-}
-function renderChips() {
-  for (const [id, key, bal] of [["viewChips", "view", 0], ["minerChips", "miner", 0], ["fromChips", "from", 1], ["toChips", "to", 0]]) {
-    $(id).innerHTML = chipsHtml(key, bal);
-    $(id).querySelectorAll(".chip").forEach(c => c.onclick = () => { S[c.dataset.k] = c.dataset.a; renderChips(); if (c.dataset.k === "view") renderWallet(); });
-  }
-}
-function renderWallet() {
-  const w = byAddr(S.view); if (!w) return;
-  $("wDetail").innerHTML = `<div class="row" style="margin:14px 0 0">${av(w, "lg")}<div><b style="font-size:18px">${esc(w.name)}</b><div class="hint" style="margin:0">tap the blurred key to reveal it</div></div></div>
-    <span class="lbl">Private key (never share!)</span><div class="hash secret" id="kPriv">${w.priv}</div>
-    <span class="lbl">Public key</span><div class="hash" style="font-size:11px">${w.pubHex}</div>
-    <span class="lbl">Address</span><div class="hash">${w.address}</div>`;
-  $("kPriv").onclick = e => e.currentTarget.classList.toggle("show");
-}
-function renderBalances(el) {
-  const rows = wallets.map(w => ({ w, b: balanceOf(w.address), p: balanceOf(w.address, true) - balanceOf(w.address) }))
-    .sort((a, c) => c.b - a.b);
-  $(el).innerHTML = rows.map((r, i) => `<div class="lb"><span class="rank">${i + 1}</span>${av(r.w)}
-    <div class="n"><b>${esc(r.w.name)}</b><span>${short(r.w.address)}</span></div>
-    <div class="amt">${r.b}<small>${r.p ? (r.p > 0 ? "+" : "") + r.p + " pending" : COIN.ticker}</small></div></div>`).join("");
-}
-function renderPool() {
-  $("pool").innerHTML = pool.map(t => `<div>${esc(label(t.from))} → ${esc(label(t.to))}: <b>${t.amount} ${COIN.ticker}</b><br><code>${short(t.id)}</code></div>`).join("")
-    || `<div class="empty">Nothing waiting. Send some coins first.</div>`;
-}
-function renderStats() {
-  $("sBlocks").textContent = chain.length;
-  $("sSupply").textContent = chain.flatMap(b => b.txs).filter(t => t.from === "COINBASE").reduce((a, t) => a + t.amount, 0);
-  $("sPending").textContent = pool.length;
-}
-function renderChain() {
-  const bad = validateChain(), badMap = new Map(bad.map(x => [x.i, x.reasons]));
-  $("chainStatus").className = "status " + (bad.length ? "bad" : "ok");
-  $("chainStatus").innerHTML = bad.length
-    ? `🚨 Chain invalid. The network rejects ${bad.length} block${bad.length > 1 ? "s" : ""}. To fix this you'd have to re-mine every one of them before anyone notices.`
-    : `✅ Chain valid · ${chain.length} block${chain.length > 1 ? "s" : ""} · every hash and link checks out. Try editing an amount below.`;
-  $("chain").innerHTML = chain.map((b, bi) => {
-    const rc = blockHash(b), broken = badMap.has(bi);
-    return (bi ? `<div class="link">${broken ? "💔" : "🔗"}</div>` : "") + `
-    <div class="blk ${broken ? "broken" : ""}">
-      <div class="top"><b>Block #${b.index}</b><span class="pill">${b.index ? "nonce " + b.nonce.toLocaleString() : "genesis"}</span></div>
-      <div class="k">prev hash</div><div class="mono">${short(b.prevHash)}</div>
-      <div class="k">saved hash</div><div class="mono">${short(b.hash)}</div>
-      <div class="k">recalculated hash</div><div class="mono ${rc === b.hash ? "ok" : "bad"}">${short(rc)}</div>
-      <div class="k">transactions</div>
-      ${b.txs.map((t, ti) => `<div class="tx"><span>${esc(label(t.from))} → ${esc(label(t.to))}</span>
-        <input type="number" value="${t.amount}" data-b="${bi}" data-t="${ti}"></div>`).join("") || '<div class="empty">none</div>'}
-      ${broken ? `<div class="why">❌ ${badMap.get(bi)[0]}</div>` : ""}
-    </div>`;
-  }).join("");
-  $("chain").querySelectorAll("input").forEach(inp => inp.oninput = () => {
-    if (!original) original = JSON.stringify(chain);
-    chain[inp.dataset.b].txs[inp.dataset.t].amount = Number(inp.value);
-    renderChain(); renderBalances("bal2"); renderBalances("bal3"); renderStats();
-    const again = $("chain").querySelector(`input[data-b="${inp.dataset.b}"][data-t="${inp.dataset.t}"]`);
-    if (again) again.focus();
-  });
-}
-function render() {
-  renderChips(); renderWallet(); renderBalances("bal2"); renderBalances("bal3"); renderPool(); renderChain(); renderStats();
-}
-
-/* ============ Level 1 ============ */
-function updateHash() {
-  const a = $("hA").value, b = $("hB").value, h1 = sha256(a), h2 = sha256(b);
-  $("hOutA").textContent = h1;
-  $("hOutB").innerHTML = [...h2].map((c, i) => c === h1[i] ? c : `<span class="d">${c}</span>`).join("");
-  let bits = 0;
-  for (let i = 0; i < 64; i++) { let x = parseInt(h1[i], 16) ^ parseInt(h2[i], 16); while (x) { bits += x & 1; x >>= 1; } }
-  $("hBar").style.width = bits / 256 * 100 + "%";
-  $("hBits").textContent = a === b ? "Same message, same fingerprint. Now change a letter in B."
-    : `${bits} of 256 bits flipped (~128 is typical). Tiny change, totally different fingerprint.`;
-}
-function mintId() {
-  const [a, b] = wallets, t = { from: a.address, to: b.address, amount: 1 + Math.floor(Math.random() * 50), timestamp: Date.now() };
-  const d = document.createElement("div");
-  d.innerHTML = `${esc(a.name)} → ${esc(b.name)} · ${t.amount} ${COIN.ticker} · ${t.timestamp}<br><code>${txId(t)}</code>`;
-  $("idLog").prepend(d); while ($("idLog").children.length > 6) $("idLog").lastChild.remove();
-}
-
-/* ============ Level 3 ============ */
-async function sendFlow() {
-  const from = byAddr(S.from), to = S.to;
-  if (!from || !to) return toast("Pick who's sending and who's receiving", true);
-  if (from.address === to) return toast("Can't send coins to yourself. Pick someone else.", true);
-  const amt = Math.floor(Number($("tAmt").value));
-  if (!(amt > 0)) return toast("Enter an amount above 0", true);
-  const t = await makeTx(from, to, amt), err = await acceptTx(t);
-  window.lastTx = t;
-  $("tInfo").innerHTML = `<div class="steps">
-    <div class="step" style="--d:0s"><i>1</i><div><b>Make the ID</b><small>SHA256(from + to + amount + time)</small><code>${t.id}</code></div></div>
-    <div class="step" style="--d:.45s"><i>2</i><div><b>Sign with ${esc(from.name)}'s private key</b><small>Only ${esc(from.name)} can produce this</small><code>${short(t.signature)}</code></div></div>
-    <div class="step ${err ? "bad" : "ok"}" style="--d:.9s"><i>${err ? "✗" : "✓"}</i><div><b>${err ? "Network rejected it" : "Network verified it"}</b>
-      <small>${err ? esc(err) : "Signature matches the public key. Now waiting for a miner."}</small></div></div></div>`;
-  if (err) toast("Rejected: " + err, true); else toast(`${amt} ${COIN.ticker} sent → ${label(to)}`);
-  render();
-}
-const atkLogs = [];
-async function attack(name, build) {
-  const from = byAddr(S.from), to = S.to;
-  if (!from || !to || from.address === to) return toast("Pick two different wallets first", true);
-  const t = await build(from, to), err = await acceptTx(t);
-  atkLogs.unshift(`<div><b>${name}</b><br>${err ? `<span class="ok">🛡️ Blocked:</span> ${esc(err)}` : `<span class="bad">⚠️ got through?!</span>`}</div>`);
-  $("atkLog").innerHTML = atkLogs.slice(0, 8).join(""); render();
-}
-const ATTACKS = {
-  atkForge: ["Forged signature", async (a, b) => { const thief = wallets.find(w => w !== a); const t = await makeTx(a, b, 1); t.signature = await sign(thief, t.id); return t; }],
-  atkTamper: ["Edited after signing", async (a, b) => { const t = await makeTx(a, b, 1); t.amount = 1000; return t; }],
-  atkOver: ["Overspend", (a, b) => makeTx(a, b, balanceOf(a.address, true) + 1000)],
-  atkDouble: ["Double-spend", async (a, b) => {
-    const last = window.lastTx || chain.flatMap(x => x.txs).reverse().find(t => t.from !== "COINBASE");
-    return last ? { ...last } : makeTx(a, b, 0); }]
-};
-
-/* ============ Wiring ============ */
-const TABS = ["t1", "t2", "t3", "t4"];
-function go(tab, focus) {
-  document.querySelectorAll(".tab").forEach(b => {
-    const on = b.dataset.tab === tab; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1;
-    if (on && focus) b.focus();
-  });
-  document.querySelectorAll("section").forEach(s => s.classList.toggle("on", s.id === tab));
-  if (tab === "t4") renderChain();
-  scrollTo({ top: 0 });
-}
-function wire() {
-  document.querySelectorAll(".tab").forEach(b => {
-    b.onclick = () => go(b.dataset.tab);
-    b.onkeydown = e => {
-      const i = TABS.indexOf(b.dataset.tab);
-      if (e.key === "ArrowRight") go(TABS[(i + 1) % 4], true);
-      if (e.key === "ArrowLeft") go(TABS[(i + 3) % 4], true);
-    };
-  });
-  $("hA").oninput = $("hB").oninput = updateHash;
-  $("genId").onclick = mintId;
-  $("wCreate").onclick = async () => {
-    const name = $("wName").value.trim() || "Wallet " + (wallets.length + 1);
-    const w = await createWallet(name); $("wName").value = ""; S.view = w.address; render(); toast(`Wallet created for ${name} ${w.avatar}`);
-  };
-  $("wName").onkeydown = e => { if (e.key === "Enter") $("wCreate").click(); };
-  $("seg").innerHTML = LEVELS.map((l, i) => `<button data-d="${i + 1}"><b>${"0".repeat(i + 1)}</b>${l}</button>`).join("");
-  $("seg").querySelectorAll("button").forEach(b => b.onclick = () => { S.diff = +b.dataset.d; updDiff(); });
-  $("slow").onchange = e => { S.slow = e.target.checked; };
-  $("mineBtn").onclick = () => mine(S.miner);
-  $("stopBtn").onclick = () => { mining = false; };
-  $("sendBtn").onclick = sendFlow;
-  $("quick").innerHTML = [5, 10, 25].map(n => `<button class="btn ghost" style="margin:0;padding:6px 14px" data-n="${n}">${n}</button>`).join("")
-    + `<button class="btn ghost" style="margin:0;padding:6px 14px" data-n="max">Max</button>`;
-  $("quick").querySelectorAll("button").forEach(b => b.onclick = () => {
-    $("tAmt").value = b.dataset.n === "max" ? Math.max(0, balanceOf(S.from, true)) : b.dataset.n; });
-  for (const id in ATTACKS) $(id).onclick = () => attack(...ATTACKS[id]);
-  $("goMine").onclick = () => go("t2");
-  $("repair").onclick = () => { if (original) { chain.splice(0, chain.length, ...JSON.parse(original)); original = null; } render(); toast("History restored"); };
-}
-function updDiff() {
-  $("zeroTxt").textContent = "0".repeat(S.diff);
-  $("seg").querySelectorAll("button").forEach(b => b.classList.toggle("on", +b.dataset.d === S.diff));
-}
-(async function boot() {
-  document.title = COIN.name + " Lab";
-  $("coinName").textContent = COIN.name; $("tk1").textContent = COIN.ticker;
-  const g = chain[0];
-  $("genesis").innerHTML = `index: 0<br>prevHash: ${g.prevHash}<br>time: ${g.timestamp}<br>hash: <span class="z">${g.hash}</span>`;
-  for (const [n, e] of [["You", "😎"], ["Bestie", "🫶"], ["Rival", "😈"]]) await createWallet(n, e);
-  S.view = S.miner = S.from = wallets[0].address; S.to = wallets[1].address;
-  wire(); updateHash(); updDiff(); render();
-})();
-</script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

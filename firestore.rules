@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function me() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+
+    // username -> uid. Anyone can check if a name is taken (get only), nobody can list them.
+    match /usernames/{name} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn()
+        && name.matches('^[a-z0-9_]{3,16}$')
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Public profile: username, wallet address, public key. Created once, never edited.
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['username', 'address', 'pubKey', 'avatar', 'hue', 'createdAt'])
+        && request.resource.data.username.matches('^[a-z0-9_]{3,16}$')
+        && getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username)).data.uid == uid
+        && request.resource.data.address.matches('^VIBE[0-9a-f]{40}$');
+      allow update, delete: if false;
+
+      // The user's own private key. Only they can read it.
+      match /secret/{doc} {
+        allow read, create: if signedIn() && request.auth.uid == uid;
+        allow update, delete: if false;
+      }
+    }
+
+    // The blockchain. Append-only: blocks can be added but never edited or deleted.
+    // Every browser re-checks each block (hash, proof of work, signatures, balances)
+    // and ignores invalid ones, so these rules only stop obvious abuse.
+    match /blocks/{hash} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.hash == hash
+        && hash.matches('^000.*')
+        && request.resource.data.miner == me().address
+        && request.resource.data.txs.size() >= 1
+        && request.resource.data.txs.size() <= 21;
+      allow update, delete: if false;
+    }
+
+    // Transactions waiting to be mined. You can only submit transactions from your own address.
+    match /mempool/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.id == id
+        && request.resource.data.from == me().address
+        && request.resource.data.amount is int
+        && request.resource.data.amount > 0;
+      allow update, delete: if false;
+    }
+  }
+}
