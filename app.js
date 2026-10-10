@@ -1,4 +1,4 @@
-﻿import { COIN, short, generateWallet, importPrivate, makeTx, coinbaseTx, checkTx, computeChain, pickTxs, pendingTxs,
+import { COIN, short, generateWallet, importPrivate, makeTx, coinbaseTx, checkTx, computeChain, pickTxs, pendingTxs,
   blockHash, GENESIS, balanceOf, newState, cloneState, applyTx, validateBlock } from "./core.js?v=3";
 import { net, errText } from "./net.js?v=3";
 
@@ -9,7 +9,7 @@ const raf = f => requestAnimationFrame(f);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const clean = t => ({ id: t.id, from: t.from, to: t.to, amount: t.amount, timestamp: t.timestamp, ...(t.pubKey ? { pubKey: t.pubKey, signature: t.signature } : {}) });
 const USER_RE = /^[a-z0-9_]{3,16}$/;
-const AVATARS = ["ðŸ˜Ž", "ðŸ«¶", "ðŸ˜ˆ", "ðŸ¦„", "ðŸ¸", "ðŸ‘¾", "ðŸ”¥", "ðŸ¤–", "ðŸ•", "ðŸ§ƒ", "ðŸ‘»", "ðŸ™", "ðŸ¦Š", "ðŸ¼", "ðŸš€", "ðŸŽ§"];
+const AVATARS = ["😎", "🫶", "😈", "🦄", "🐸", "👾", "🔥", "🤖", "🍕", "🧃", "👻", "🐙", "🦊", "🐼", "🚀", "🎧"];
 
 function toast(msg, bad) {
   const d = document.createElement("div"); d.className = "toast" + (bad ? " bad" : ""); d.textContent = msg;
@@ -38,7 +38,7 @@ const G = { uid: null, profile: null, jwk: null, key: null, users: new Map(), by
 const me = () => G.profile?.address;
 const joined = () => !!G.profile;
 const label = a => a === "COINBASE" ? "Mining reward" : a === "GENESIS" ? "Genesis" : G.byAddr.get(a) ? "@" + G.byAddr.get(a).username : short(a);
-const av = (p, cls = "") => p ? `<span class="av ${cls}" style="--h:${p.hue}">${p.avatar}</span>` : `<span class="av ${cls}" style="--h:200">ðŸ¤–</span>`;
+const av = (p, cls = "") => p ? `<span class="av ${cls}" style="--h:${p.hue}">${p.avatar}</span>` : `<span class="av ${cls}" style="--h:200">🤖</span>`;
 const balance = a => balanceOf(G.state, a);
 const members = () => [...G.users.values()].sort((a, b) => a.createdAt - b.createdAt);
 function stateWithMine() {   // confirmed state + my own unconfirmed payments, so I can't overspend while waiting
@@ -51,7 +51,7 @@ function stateWithMine() {   // confirmed state + my own unconfirmed payments, s
 function onErr() { G.readErr = true; renderLight(); }
 function onUsers(l) {
   const next = new Map(l.map(u => [u._id, u]));
-  if (G.usersLoaded) for (const [id, u] of next) if (!G.users.has(id) && id !== G.uid) toast(`@${u.username} just joined the network ðŸŽ‰`);
+  if (G.usersLoaded) for (const [id, u] of next) if (!G.users.has(id) && id !== G.uid) toast(`@${u.username} just joined the network 🎉`);
   G.users = next; G.byAddr = new Map(l.map(u => [u.address, u])); G.usersLoaded = true; G.freshUser = null;
   renderLight();
 }
@@ -171,22 +171,22 @@ async function syncVerify() {
   if (G.verifying) return;
   G.verifying = true; G.dl = false; G.verified = false; renderJourney(); $("resync").hidden = true; $("syncDone").innerHTML = "";
   const box = $("sync"), chain = G.chain.slice();
-  box.innerHTML = `<div class="r wait"><b class="t">â€¦</b><span>Step 3 Â· Downloading every block from the networkâ€¦</span></div>`;
+  box.innerHTML = `<div class="r wait"><b class="t">…</b><span>Step 3 · Downloading every block from the network…</span></div>`;
   await sleep(700);
   G.dl = true; renderJourney();
-  box.innerHTML = `<div class="r"><b class="t">âœ“</b><span>Block #0 Â· genesis<small>Step 4 Â· Built into every copy. It matches the chain's ID.</small></span></div>`;
+  box.innerHTML = `<div class="r"><b class="t">✓</b><span>Block #0 · genesis<small>Step 4 · Built into every copy. It matches the chain's ID.</small></span></div>`;
   const st = newState(); let bad = null;
   const pause = Math.max(60, Math.min(450, 3200 / Math.max(1, chain.length - 1)));
   for (let i = 1; i < chain.length; i++) {
     const b = chain[i];
-    box.insertAdjacentHTML("beforeend", `<div class="r wait" id="vr${i}"><b class="t">â€¦</b><span>Step 4 Â· Checking block #${i}â€¦</span></div>`);
+    box.insertAdjacentHTML("beforeend", `<div class="r wait" id="vr${i}"><b class="t">…</b><span>Step 4 · Checking block #${i}…</span></div>`);
     box.scrollTop = box.scrollHeight;
     await sleep(pause);
     const err = await validateBlock(b, chain[i - 1], st);
     const row = $("vr" + i);
-    if (err) { bad = { i, err }; row.className = "r bad"; row.innerHTML = `<b class="t">âœ—</b><span>Block #${i} rejected<small>${esc(err)}</small></span>`; break; }
+    if (err) { bad = { i, err }; row.className = "r bad"; row.innerHTML = `<b class="t">✗</b><span>Block #${i} rejected<small>${esc(err)}</small></span>`; break; }
     row.className = "r";
-    row.innerHTML = `<b class="t">âœ“</b><span>Block #${i} Â· mined by ${esc(label(b.miner))} Â· ${b.txs.length - 1} payment${b.txs.length === 2 ? "" : "s"}<small>hash ${short(b.hash)} Â· links to #${i - 1} Â· work done Â· signatures valid</small></span>`;
+    row.innerHTML = `<b class="t">✓</b><span>Block #${i} · mined by ${esc(label(b.miner))} · ${b.txs.length - 1} payment${b.txs.length === 2 ? "" : "s"}<small>hash ${short(b.hash)} · links to #${i - 1} · work done · signatures valid</small></span>`;
     box.scrollTop = box.scrollHeight;
   }
   const mine = members().findIndex(u => u.address === me()) + 1;
@@ -194,8 +194,8 @@ async function syncVerify() {
     ? `<div class="banner bad">Block #${bad.i} failed the check, so this copy stops there.</div>`
     : chain.length === 1
       ? `<div class="banner info">The chain only has its genesis block so far. You can mine the first real block in step 3.</div>`
-      : `<div class="banner ok">âœ… ${chain.length - 1} block${chain.length === 2 ? "" : "s"} checked. You hold a full, verified copy of the blockchain${mine ? ` and you're member #${mine}` : ""}. You didn't have to ask anyone whether the chain was honest. You checked it yourself.</div>`;
-  $("n2").classList.add("done"); $("n2").textContent = "âœ“";
+      : `<div class="banner ok">✅ ${chain.length - 1} block${chain.length === 2 ? "" : "s"} checked. You hold a full, verified copy of the blockchain${mine ? ` and you're member #${mine}` : ""}. You didn't have to ask anyone whether the chain was honest. You checked it yourself.</div>`;
+  $("n2").classList.add("done"); $("n2").textContent = "✓";
   G.verifying = false; G.verified = !bad; renderJourney(); $("resync").hidden = false;
   if (!bad) confetti();
 }
@@ -216,7 +216,7 @@ async function mine() {
       const fs = performance.now();
       do { b.hash = blockHash(b); if (b.hash.startsWith(target)) { found = true; break; } b.nonce++; } while (performance.now() - fs < 12);
       $("mBar").style.width = Math.min(100, b.nonce / expected * 100) + "%";
-      $("mText").textContent = `Guess #${b.nonce.toLocaleString()} Â· block #${b.index} Â· ${txs.length - 1} payment${txs.length === 2 ? "" : "s"} included Â· ${((performance.now() - t0) / 1000).toFixed(1)}s`;
+      $("mText").textContent = `Guess #${b.nonce.toLocaleString()} · block #${b.index} · ${txs.length - 1} payment${txs.length === 2 ? "" : "s"} included · ${((performance.now() - t0) / 1000).toFixed(1)}s`;
       if (found) break;
       await new Promise(r => raf(r));
     }
@@ -224,8 +224,8 @@ async function mine() {
     try {
       await net.postBlock({ index: b.index, prevHash: b.prevHash, timestamp: b.timestamp, txs: b.txs.map(clean), nonce: b.nonce, miner, hash: b.hash });
       posted = true; $("mBar").style.width = "100%";
-      $("mResult").innerHTML = `<div class="banner ok">ðŸŽ‰ Block #${b.index} added to the chain! ${COIN.reward} ${COIN.ticker} sent to you.</div>`;
-      toast(`+${COIN.reward} ${COIN.ticker} for you ðŸ¤‘`);
+      $("mResult").innerHTML = `<div class="banner ok">🎉 Block #${b.index} added to the chain! ${COIN.reward} ${COIN.ticker} sent to you.</div>`;
+      toast(`+${COIN.reward} ${COIN.ticker} for you 🤑`);
       confetti();
     } catch (e) { $("mResult").innerHTML = `<div class="banner bad">The network refused the block: ${esc(errText(e))}</div>`; }
     break;
@@ -235,7 +235,7 @@ async function mine() {
 }
 function setMineUI(on) {
   $("mineBtn").disabled = on; $("stopBtn").disabled = !on;
-  $("mineBtn").textContent = on ? "â›ï¸ Miningâ€¦" : "â›ï¸ Mine a block";
+  $("mineBtn").textContent = on ? "⛏️ Mining…" : "⛏️ Mine a block";
   $("mineBtn").classList.toggle("pulse", on);
   if (on) { $("mResult").innerHTML = ""; $("mBar").style.width = "0"; }
 }
@@ -252,7 +252,7 @@ async function sendFlow() {
     else {
       $("sendMsg").innerHTML = `<div class="banner ok">Signed with your private key and sent to ${esc(label(G.to))}. It's confirmed once a block is mined. <button class="btn ghost small" id="mineNow" style="margin-left:6px">Mine it now</button></div>`;
       $("mineNow").onclick = () => { $("mineBtn").scrollIntoView({ behavior: "smooth", block: "center" }); mine(); };
-      toast(`${amt} ${COIN.ticker} sent to ${label(G.to)} ðŸ’¸`);
+      toast(`${amt} ${COIN.ticker} sent to ${label(G.to)} 💸`);
     }
   } finally { $("sendBtn").disabled = false; }
   renderLight();
@@ -273,7 +273,7 @@ function renderChain() {
   $("netNote").innerHTML = G.readErr
     ? `<div class="banner bad" style="margin:0 0 12px">Couldn't read the chain. Publish the latest <code>firestore.rules</code> so the chain is public, then refresh.</div>` : "";
   const last = G.chain.slice(-8), first = G.chain.length - last.length;
-  $("chain").innerHTML = last.map((b, k) => (k ? `<div class="link">ðŸ”—</div>` : "") + `
+  $("chain").innerHTML = last.map((b, k) => (k ? `<div class="link">🔗</div>` : "") + `
     <div class="blk ${b.hash === G.freshTip ? "fresh" : ""}">
       <div class="head"><b>#${b.index}</b>${b.index ? "" : '<span class="pill">genesis</span>'}</div>
       ${b.index ? `<div class="k">mined by</div><div class="who">${esc(label(b.miner))}</div>` : ""}
@@ -287,13 +287,13 @@ function renderMembers() {
   $("members").innerHTML = shown.map((u, i) => `<div class="lb ${u.address === me() ? "you" : ""}"><span class="rank">#${i + 1}</span>${av(u)}
     <div class="n"><b>@${esc(u.username)}${u.address === me() ? " (you)" : ""}</b><span>${short(u.address)}</span></div>
     <div class="amt">${balance(u.address)}<small>${COIN.ticker}</small></div></div>`).join("")
-    + (list.length > 12 ? `<div class="empty">â€¦and ${list.length - 12} more</div>` : "")
+    + (list.length > 12 ? `<div class="empty">…and ${list.length - 12} more</div>` : "")
     || `<div class="empty">${G.readErr ? "" : "No members yet. Be the first to join!"}</div>`;
 }
 function renderJoin() {
   $("setupWarn").hidden = net.configured;
   $("authBox").hidden = joined(); $("walletBox").hidden = !joined();
-  $("n1").classList.toggle("done", joined()); $("n1").textContent = joined() ? "âœ“" : "2";
+  $("n1").classList.toggle("done", joined()); $("n1").textContent = joined() ? "✓" : "2";
   if (!joined()) return;
   const p = G.profile;
   $("walletBox").innerHTML = `<div class="row" style="margin:0 0 4px">${av(p, "lg")}<div><b style="font-size:18px">@${esc(p.username)}</b><div class="hint" style="margin:0">This is your identity on the network.</div></div></div>
@@ -314,10 +314,10 @@ function renderPart() {
   const items = [];
   for (let i = G.chain.length - 1; i > 0 && items.length < 10; i--) {
     const b = G.chain[i];
-    for (const t of b.txs.slice(1).reverse()) items.push(`<div><span class="who">${esc(label(t.from))}</span> â†’ <span class="who">${esc(label(t.to))}</span>: <b>${t.amount} ${COIN.ticker}</b> Â· block #${i}</div>`);
-    items.push(`<div>â›ï¸ Block #${i} mined by <span class="who">${esc(label(b.miner))}</span></div>`);
+    for (const t of b.txs.slice(1).reverse()) items.push(`<div><span class="who">${esc(label(t.from))}</span> → <span class="who">${esc(label(t.to))}</span>: <b>${t.amount} ${COIN.ticker}</b> · block #${i}</div>`);
+    items.push(`<div>⛏️ Block #${i} mined by <span class="who">${esc(label(b.miner))}</span></div>`);
   }
-  const pend = pendingTxs(G.mempool, G.state).map(t => `<div>â³ <span class="who">${esc(label(t.from))}</span> â†’ <span class="who">${esc(label(t.to))}</span>: <b>${t.amount} ${COIN.ticker}</b> Â· waiting for a block</div>`);
+  const pend = pendingTxs(G.mempool, G.state).map(t => `<div>⏳ <span class="who">${esc(label(t.from))}</span> → <span class="who">${esc(label(t.to))}</span>: <b>${t.amount} ${COIN.ticker}</b> · waiting for a block</div>`);
   $("feed").innerHTML = pend.concat(items).slice(0, 12).join("") || `<div class="empty">Nothing yet. Mine a block or send some coins.</div>`;
 }
 function renderJourney() {
@@ -325,7 +325,7 @@ function renderJourney() {
   const first = done.findIndex(d => !d);
   document.querySelectorAll("#journey .j").forEach((el, i) => {
     el.className = "j" + (done[i] ? " done" : i === first ? " active" : "");
-    el.querySelector("i").textContent = done[i] ? "âœ“" : String(i + 1);
+    el.querySelector("i").textContent = done[i] ? "✓" : String(i + 1);
   });
 }
 function renderLight() { renderJourney(); renderStats(); renderChain(); renderMembers(); renderJoin(); renderPart(); }
