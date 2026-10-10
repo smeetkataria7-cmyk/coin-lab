@@ -33,7 +33,7 @@ function confettiRun() {
 /* ============ State ============ */
 const G = { uid: null, profile: null, jwk: null, key: null, users: new Map(), byAddr: new Map(), usersLoaded: false,
   blocks: [], mempool: [], chain: [GENESIS], state: newState(), chainLoaded: false, freshTip: null,
-  mining: false, to: null, verifying: false, readErr: false, busy: false, unsub: [] };
+  mining: false, to: null, verifying: false, dl: false, verified: false, readErr: false, busy: false, unsub: [] };
 
 const me = () => G.profile?.address;
 const joined = () => !!G.profile;
@@ -121,7 +121,7 @@ async function enterApp(uid) {
 }
 function leaveApp() {
   G.mining = false;
-  Object.assign(G, { uid: null, profile: null, jwk: null, key: null, mempool: [], to: null, verifying: false });
+  Object.assign(G, { uid: null, profile: null, jwk: null, key: null, mempool: [], to: null, verifying: false, dl: false, verified: false });
   $("sync").innerHTML = `<div class="empty">Waiting for step 2.</div>`; $("syncDone").innerHTML = ""; $("resync").hidden = true;
   startWatching(false); setMode("login"); showAuth("main"); render();
 }
@@ -169,10 +169,11 @@ function wireAuth() {
 /* ============ Step 2: download and check the chain ============ */
 async function syncVerify() {
   if (G.verifying) return;
-  G.verifying = true; $("resync").hidden = true; $("syncDone").innerHTML = "";
+  G.verifying = true; G.dl = false; G.verified = false; renderJourney(); $("resync").hidden = true; $("syncDone").innerHTML = "";
   const box = $("sync"), chain = G.chain.slice();
   box.innerHTML = `<div class="r wait"><b class="t">…</b><span>Step 3 · Downloading every block from the network…</span></div>`;
   await sleep(700);
+  G.dl = true; renderJourney();
   box.innerHTML = `<div class="r"><b class="t">✓</b><span>Block #0 · genesis<small>Step 4 · Built into every copy. It matches the chain's ID.</small></span></div>`;
   const st = newState(); let bad = null;
   const pause = Math.max(60, Math.min(450, 3200 / Math.max(1, chain.length - 1)));
@@ -193,9 +194,9 @@ async function syncVerify() {
     ? `<div class="banner bad">Block #${bad.i} failed the check, so this copy stops there.</div>`
     : chain.length === 1
       ? `<div class="banner info">The chain only has its genesis block so far. You can mine the first real block in step 3.</div>`
-      : `<div class="banner ok">✅ ${chain.length - 1} block${chain.length === 2 ? "" : "s"} checked. You hold a full, verified copy of the blockchain${mine ? ` and you're member #${mine}` : ""}.</div>`;
+      : `<div class="banner ok">✅ ${chain.length - 1} block${chain.length === 2 ? "" : "s"} checked. You hold a full, verified copy of the blockchain${mine ? ` and you're member #${mine}` : ""}. You didn't have to ask anyone whether the chain was honest. You checked it yourself.</div>`;
   $("n2").classList.add("done"); $("n2").textContent = "✓";
-  G.verifying = false; $("resync").hidden = false;
+  G.verifying = false; G.verified = !bad; renderJourney(); $("resync").hidden = false;
   if (!bad) confetti();
 }
 
@@ -319,7 +320,15 @@ function renderPart() {
   const pend = pendingTxs(G.mempool, G.state).map(t => `<div>⏳ <span class="who">${esc(label(t.from))}</span> → <span class="who">${esc(label(t.to))}</span>: <b>${t.amount} ${COIN.ticker}</b> · waiting for a block</div>`);
   $("feed").innerHTML = pend.concat(items).slice(0, 12).join("") || `<div class="empty">Nothing yet. Mine a block or send some coins.</div>`;
 }
-function renderLight() { renderStats(); renderChain(); renderMembers(); renderJoin(); renderPart(); }
+function renderJourney() {
+  const done = [G.chainLoaded && G.usersLoaded, joined(), joined() && G.dl, joined() && G.verified, joined() && balance(me()) > 0];
+  const first = done.findIndex(d => !d);
+  document.querySelectorAll("#journey .j").forEach((el, i) => {
+    el.className = "j" + (done[i] ? " done" : i === first ? " active" : "");
+    el.querySelector("i").textContent = done[i] ? "✓" : String(i + 1);
+  });
+}
+function renderLight() { renderJourney(); renderStats(); renderChain(); renderMembers(); renderJoin(); renderPart(); }
 function render() { renderLight(); }
 
 /* ============ Tabs + boot ============ */
@@ -342,6 +351,11 @@ function wire() {
     };
   });
   $("toJoin").onclick = () => go("t2");
+  $("bigToggle").onclick = () => {
+    const on = document.body.classList.toggle("big");
+    try { localStorage.setItem("big", on ? "1" : ""); } catch { /* private mode */ }
+  };
+  try { if (localStorage.getItem("big")) document.body.classList.add("big"); } catch { /* private mode */ }
   $("gateBtn").onclick = () => go("t2");
   $("resync").onclick = syncVerify;
   $("mineBtn").onclick = mine;

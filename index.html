@@ -162,6 +162,23 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .toast{background:rgba(20,20,30,.96);border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:12px;padding:12px 16px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:slide .35s cubic-bezier(.2,1.4,.4,1)}
 .toast.bad{border-left-color:var(--bad)}
 @keyframes slide{from{transform:translateX(120%)}}
+
+.explain{background:rgba(139,92,255,.12);border:1px solid rgba(139,92,255,.4);border-radius:18px;padding:18px 20px;margin:0 0 18px}
+.explain h4{margin:0 0 10px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#d9ccff}
+.explain p,.explain li{margin:0 0 8px;font-size:clamp(16px,2vw,19px);line-height:1.5}
+.explain p:last-child,.explain li:last-child{margin:0}
+.explain b{color:var(--lime)}
+.explain ol{margin:8px 0 0;padding-left:22px}
+.journey{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.journey .j{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);background:var(--card)}
+.journey .j i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card2);font:600 12px var(--mono);font-style:normal}
+.journey .j.active{color:var(--text);border-color:var(--lime)}
+.journey .j.active i{background:var(--lime);color:#0a0a10}
+.journey .j.done{color:var(--text)}
+.journey .j.done i{background:var(--ok);color:#06140c}
+.aa{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:5px 14px;font:600 13px var(--sans);cursor:pointer}
+.aa:hover{background:var(--card2)}
+body.big{zoom:1.25}
 footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted);font-size:13px;text-align:center}
 </style>
 </head>
@@ -183,6 +200,14 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
     <div class="stat">Blocks<b id="sBlocks">1</b></div>
     <div class="stat">Members<b id="sUsers">0</b></div>
     <div class="stat">Coins in existence<b id="sSupply">0</b></div>
+    <button class="aa" id="bigToggle" type="button" title="Bigger text for the projector">Aa Bigger text</button>
+  </div>
+  <div class="journey" id="journey">
+    <div class="j"><i>1</i>Find the chain</div>
+    <div class="j"><i>2</i>Get a wallet</div>
+    <div class="j"><i>3</i>Download</div>
+    <div class="j"><i>4</i>Check every block</div>
+    <div class="j"><i>5</i>Take part</div>
   </div>
 </header>
 
@@ -199,6 +224,13 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 <section id="t1" class="on" role="tabpanel" aria-labelledby="tab-t1">
   <p class="intro">A blockchain that's already running</p>
   <p class="sub">These people already share one ledger. Nobody owns it, and anyone can look at it. This is what it looks like right now.</p>
+  <div class="explain">
+    <h4>Step 1 · Find the blockchain · in plain words</h4>
+    <p>A blockchain has <b>no head office</b>, so there is no sign-up page to hunt for. To find one, you need two things.</p>
+    <p><b>1. An entry point.</b> The address of someone already on the network. Here, it is this website. Bitcoin's software has a built-in list of "seed" computers to ask first.</p>
+    <p><b>2. A way to know it's the real one.</b> Every blockchain starts with a first block, the <b>genesis block</b>. Its fingerprint is the chain's ID, and every honest copy begins with the same one.</p>
+    <p>Anyone can <b>look</b> at the chain without joining, just like you are doing now. Joining is what lets you take part.</p>
+  </div>
   <div class="grid">
     <div class="card wide">
       <h3><span class="n">1</span>The chain you just found</h3>
@@ -242,6 +274,13 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
   <div class="grid">
     <div class="card">
       <h3><span class="n" id="n1">2</span>Get a wallet</h3>
+      <div class="explain">
+        <h4>Step 2 · in plain words</h4>
+        <p>Nobody <b>gives</b> you an account. You make your own, and it is a pair of keys.</p>
+        <p><b>Private key:</b> your secret signature stamp. Only you have it.</p>
+        <p><b>Public key:</b> lets everyone check your stamp is real, but not copy it.</p>
+        <p><b>Address:</b> your account number, made from your public key.</p>
+      </div>
       <div id="authBox">
         <p class="hint" id="authSub">Create an account. Your browser generates your wallet keys.</p>
         <div class="banner bad" id="setupWarn" hidden style="margin:0 0 14px">Firebase isn't connected yet. Paste your config into <code>firebase-config.js</code>.</div>
@@ -273,7 +312,17 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 
     <div class="card">
       <h3><span class="n" id="n2">3</span>Download and check the chain</h3>
-      <p class="hint" id="syncHint">Step 3 downloads every block. Step 4 checks each one on your own device: the hash, the work, and every signature.</p>
+      <div class="explain">
+        <h4>Steps 3 and 4 · in plain words</h4>
+        <p><b>Step 3, download:</b> ask the network for every block, from the very first one, and keep your own full copy.</p>
+        <p><b>Step 4, check:</b> don't trust whoever sent it. Check every block yourself with four questions:</p>
+        <ol>
+          <li><b>Fingerprint:</b> does the block's hash match its contents?</li>
+          <li><b>Link:</b> does it point to the block before it?</li>
+          <li><b>Work:</b> does its hash start with four zeros, proving the puzzle was solved?</li>
+          <li><b>Signatures:</b> is every payment signed by its sender, who had enough coins?</li>
+        </ol>
+      </div>
       <div class="sync" id="sync"><div class="empty">Waiting for step 2.</div></div>
       <div id="syncDone"></div>
       <button class="btn ghost" id="resync" hidden>Replay the check</button>
@@ -284,6 +333,13 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 <!-- 3 TAKE PART -->
 <section id="t3" role="tabpanel" aria-labelledby="tab-t3">
   <p class="intro">Step 5: you're a member. Take part.</p>
+  <div class="explain">
+    <h4>Step 5 · Take part · in plain words</h4>
+    <p>You are a full member now. There are three things you can do.</p>
+    <p><b>Receive:</b> a member signs a payment to your address. It becomes final once a block includes it.</p>
+    <p><b>Mine:</b> solve a small puzzle: find a number so the block's fingerprint starts with four zeros. The winner adds the next block and earns 50 coins, and everyone's copy updates.</p>
+    <p><b>Send:</b> sign a payment with your private key. Every member checks your signature before accepting it.</p>
+  </div>
   <div class="card" id="gate" hidden>
     <h3>Join first</h3>
     <p class="hint">You need a wallet before you can receive, send or mine.</p>
