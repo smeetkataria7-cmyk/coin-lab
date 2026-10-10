@@ -1,5 +1,5 @@
 /* Network layer: Firebase Auth + Firestore. The rest of the app only talks to `net`. */
-import { firebaseConfig } from "./firebase-config.js?v=3";
+import { firebaseConfig } from "./firebase-config.js?v=4";
 
 const V = "10.14.1", CDN = `https://www.gstatic.com/firebasejs/${V}`;
 export const configured = !!firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("PASTE");

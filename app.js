@@ -1,6 +1,6 @@
 import { COIN, short, generateWallet, importPrivate, makeTx, coinbaseTx, checkTx, computeChain, pickTxs, pendingTxs,
-  blockHash, GENESIS, balanceOf, newState, cloneState, applyTx, validateBlock } from "./core.js?v=3";
-import { net, errText } from "./net.js?v=3";
+  blockHash, GENESIS, balanceOf, newState, cloneState, applyTx, validateBlock } from "./core.js?v=4";
+import { net, errText } from "./net.js?v=4";
 
 /* ============ Helpers ============ */
 const $ = id => document.getElementById(id);
