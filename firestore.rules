@@ -17,8 +17,9 @@ service cloud.firestore {
     }
 
     // Public profile: username, wallet address, public key. Created once, never edited.
+    // Anyone may read it, like the member list of a public blockchain.
     match /users/{uid} {
-      allow read: if signedIn();
+      allow read: if true;
       allow create: if signedIn()
         && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['username', 'address', 'pubKey', 'avatar', 'hue', 'createdAt'])
@@ -37,8 +38,9 @@ service cloud.firestore {
     // The blockchain. Append-only: blocks can be added but never edited or deleted.
     // Every browser re-checks each block (hash, proof of work, signatures, balances)
     // and ignores invalid ones, so these rules only stop obvious abuse.
+    // Anyone can read the chain (that's what makes it public). Only members can add blocks.
     match /blocks/{hash} {
-      allow read: if signedIn();
+      allow read: if true;
       allow create: if signedIn()
         && request.resource.data.hash == hash
         && hash.matches('^000.*')

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>Coin Lab</title>
+<title>Join the Blockchain</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -27,23 +27,20 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--sans);
 @keyframes float{to{transform:translate(5vmax,4vmax) scale(1.12)}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:70}
 
-/* header */
 header{max-width:1120px;margin:auto;padding:24px 18px 16px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.logo{font-size:clamp(30px,6vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:0}
+.logo{font-size:clamp(28px,5.5vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
 .grad{background:linear-gradient(90deg,var(--lime),var(--cyan) 50%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
 .tag{color:var(--muted);margin:10px 0 14px;font-size:clamp(15px,2.4vw,17px)}
 .me{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 5px}
 .me b{display:block;line-height:1.15;font-size:14px}.me small{color:var(--lime);font-family:var(--mono);font-size:12px;display:block;line-height:1.1}
 .me button{background:var(--card2);color:var(--text);border:0;border-radius:999px;padding:8px 14px;cursor:pointer;font:500 13px var(--sans)}
-.me button:hover{background:rgba(255,255,255,.15)}
 .stats{display:flex;gap:8px;flex-wrap:wrap}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--muted)}
 .stat b{color:var(--text);font-family:var(--mono);margin-left:6px}
 .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;box-shadow:0 0 0 0 var(--ok);animation:ping 1.8s infinite}
 @keyframes ping{70%{box-shadow:0 0 0 8px transparent}}
 
-/* tab bar */
 .tabbar{position:sticky;top:0;z-index:30;background:rgba(10,10,15,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .tabs{max-width:1120px;margin:auto;padding:0 18px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -67,13 +64,14 @@ section{display:none} section.on{display:block;animation:in .35s ease}
 .sub{color:var(--muted);margin:0 0 22px;max-width:68ch}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;min-width:0}
-.card h3{margin:0 0 6px;font-size:18px}
+.card.wide{grid-column:1/-1}
+.card h3{margin:0 0 6px;font-size:18px;display:flex;align-items:center;gap:10px}
+.card h3 .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--violet);font:700 12px var(--mono)}
+.card h3 .n.done{background:var(--ok);color:#06140c}
 .hint{color:var(--muted);font-size:14px;margin:0 0 14px}
 code,.mono{font-family:var(--mono);font-size:12.5px}
-.formula{font-family:var(--mono);font-size:12.5px;background:rgba(139,92,255,.14);border:1px dashed rgba(139,92,255,.45);border-radius:12px;padding:10px 12px;margin:0 0 14px;word-break:break-word;color:#d9ccff}
 .hash{font-family:var(--mono);font-size:12.5px;word-break:break-all;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:10px 12px;line-height:1.6}
-.hash .z{color:var(--lime);font-weight:600;text-shadow:0 0 12px rgba(200,255,61,.7)}
-.hash .d{color:var(--pink);font-weight:600}
+.hash .z{color:var(--lime);font-weight:600}
 .lbl{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
 input:not([type=checkbox]){width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:11px 13px;font:inherit;outline:none;transition:.2s}
 input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
@@ -83,11 +81,9 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
 .btn.big{font-size:17px;padding:15px 24px;width:100%}
 .btn.ghost{background:var(--card2);color:var(--text);border:1px solid var(--line)}
-.btn.hack{background:transparent;color:var(--pink);border:1px solid rgba(255,79,163,.6);margin:4px 6px 0 0;padding:9px 14px;font-size:14px}
-.btn.hack:hover{background:rgba(255,79,163,.12);box-shadow:none}
+.btn.small{margin:0;padding:6px 14px;font-size:14px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-/* chips */
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:5px 14px 5px 5px;cursor:pointer;font:inherit;text-align:left;transition:.15s}
 .chip:hover{background:var(--card2)}
@@ -97,72 +93,60 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .av{width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px;flex:none;
     background:linear-gradient(135deg,hsl(var(--h) 85% 55%),hsl(calc(var(--h) + 60) 85% 45%))}
 .av.lg{width:50px;height:50px;font-size:26px}
-.av.sm{width:30px;height:30px;font-size:16px}
 
-/* leaderboard */
 .lb{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .lb:last-child{border:0}
 .lb.you{background:rgba(200,255,61,.07);margin:0 -10px;padding:10px;border-radius:12px;border-bottom-color:transparent}
+.lb.fresh{animation:flash 2.5s}
+@keyframes flash{0%{background:rgba(61,240,255,.3)}100%{background:transparent}}
 .lb .n{flex:1;min-width:0}.lb .n b{display:block}.lb .n span{color:var(--muted);font-family:var(--mono);font-size:11px;word-break:break-all}
 .lb .amt{font:700 20px var(--mono);text-align:right}.lb .amt small{display:block;font-size:11px;color:var(--cyan);font-weight:400}
-.rank{width:22px;color:var(--muted);font-family:var(--mono);font-size:13px}
+.rank{width:26px;color:var(--muted);font-family:var(--mono);font-size:13px}
 
 .secret{filter:blur(7px);cursor:pointer;transition:.3s;user-select:none}
 .secret.show{filter:none;user-select:text}
-.toggle{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px;margin-top:14px;cursor:pointer}
-.toggle input{accent-color:var(--lime);width:18px;height:18px}
-.balbig{font:700 clamp(34px,7vw,46px)/1 var(--mono);letter-spacing:-.03em}
+.balbig{font:700 clamp(36px,8vw,52px)/1 var(--mono);letter-spacing:-.03em}
 .balbig small{font-size:16px;color:var(--muted);font-weight:400}
 
-/* mining live */
-.slot{font:700 clamp(34px,8vw,52px)/1 var(--mono);letter-spacing:-.03em;background:linear-gradient(90deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.chain{display:flex;align-items:stretch;overflow-x:auto;padding:6px 2px 14px}
+.blk{flex:0 0 190px;background:var(--card);border:1.5px solid rgba(77,255,166,.5);border-radius:16px;padding:12px;min-width:0}
+.blk.fresh{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.blk .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pill{font:600 11px var(--mono);border-radius:99px;padding:3px 9px;background:rgba(139,92,255,.25);color:#d9ccff}
+.blk .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.link{flex:0 0 30px;display:grid;place-items:center;font-size:16px}
+.who{color:var(--lime);font-weight:600}
+
+.steps{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.step{display:flex;gap:12px}
+.step i{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--violet);font:700 12px var(--mono);font-style:normal}
+.step div{min-width:0}.step small{display:block;color:var(--muted);font-size:13px}
+
 .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:12px}
 .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:99px;transition:width .1s}
 .banner{border-radius:14px;padding:12px 14px;font-weight:600;margin-top:14px;animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
 .banner.ok{background:rgba(77,255,166,.12);border:1px solid rgba(77,255,166,.45);color:var(--ok)}
 .banner.bad{background:rgba(255,84,104,.12);border:1px solid rgba(255,84,104,.45);color:#ff98a4}
-@keyframes pop{from{transform:scale(.9);opacity:0}}
+.banner.info{background:rgba(61,240,255,.1);border:1px solid rgba(61,240,255,.4);color:var(--cyan)}
 .pulse{animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.6}}
 
-.steps{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-.step{display:flex;gap:12px;opacity:0;animation:up .5s var(--d,0s) forwards}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.step i{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--violet);font:700 12px var(--mono);font-style:normal}
-.step.ok i{background:var(--ok);color:#06140c}.step.bad i{background:var(--bad)}
-.step div{min-width:0}.step small{display:block;color:var(--muted);font-size:13px}
-.step code{display:block;word-break:break-all;color:var(--cyan);margin-top:2px}
+.sync{max-height:340px;overflow:auto}
+.sync .r{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;animation:in .3s}
+.sync .r:last-child{border:0}
+.sync .r b.t{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ok);color:#06140c;font-size:13px}
+.sync .r.bad b.t{background:var(--bad);color:#fff}
+.sync .r.wait b.t{background:var(--card2);color:var(--muted)}
+.sync .r span{flex:1;min-width:0}
+.sync .r small{display:block;color:var(--muted);font-family:var(--mono);font-size:11px}
 
-.list{max-height:280px;overflow:auto}
-.list>div{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;animation:in .3s}
+.list{max-height:300px;overflow:auto}
+.list>div{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
 .list>div:last-child{border:0}
-.list code{color:var(--cyan);word-break:break-all}
 .empty{color:var(--muted);font-size:14px;padding:6px 0}
-.who{color:var(--lime);font-weight:600}
 
-/* explorer */
-.status{border-radius:16px;padding:14px 18px;font-weight:600;margin-bottom:16px}
-.status.ok{background:rgba(77,255,166,.11);border:1px solid rgba(77,255,166,.4);color:var(--ok)}
-.status.bad{background:rgba(255,84,104,.13);border:1px solid rgba(255,84,104,.5);color:#ff98a4;animation:shake .4s}
-@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.chain{display:flex;align-items:stretch;overflow-x:auto;padding:6px 2px 16px}
-.blk{flex:0 0 min(300px,80vw);background:var(--card);border:1.5px solid rgba(77,255,166,.5);border-radius:18px;padding:14px;min-width:0}
-.blk.broken{border-color:var(--bad);background:rgba(255,84,104,.08);animation:shake .4s}
-.blk .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.pill{font:600 11px var(--mono);border-radius:99px;padding:3px 9px;background:rgba(139,92,255,.25);color:#d9ccff}
-.blk .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:10px}
-.blk .why{color:#ff98a4;font-size:12px;margin-top:10px}
-.tx{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:13px}
-.tx span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tx input{width:78px;padding:6px 8px;border-radius:9px}
-.link{flex:0 0 40px;display:grid;place-items:center;font-size:18px}
-.ok{color:var(--ok)}.bad{color:var(--bad)}
-
-/* auth overlay */
-.overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;overflow:auto;background:rgba(10,10,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.authcard{width:min(440px,100%);background:rgba(20,20,30,.9);border:1px solid var(--line);border-radius:24px;padding:28px}
-.authcard .logo{font-size:36px;margin-bottom:6px}
-.mode{display:grid;grid-template-columns:1fr 1fr;background:rgba(0,0,0,.35);border-radius:12px;padding:4px;margin:16px 0}
+.mode{display:grid;grid-template-columns:1fr 1fr;background:rgba(0,0,0,.35);border-radius:12px;padding:4px;margin:10px 0 16px}
 .mode button{background:none;border:0;color:var(--muted);padding:9px;border-radius:9px;font:600 14px var(--sans);cursor:pointer}
 .mode button.on{background:var(--card2);color:var(--text)}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1f1f1f;border:0;border-radius:12px;padding:12px;font:600 15px var(--sans);cursor:pointer}
@@ -172,6 +156,7 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .field{margin-bottom:10px}
 .linkbtn{background:none;border:0;color:var(--cyan);cursor:pointer;font:inherit;font-size:13px;padding:0;margin-top:10px}
 .msg{font-size:14px;margin-top:12px;min-height:20px}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
 
 #toasts{position:fixed;top:14px;right:14px;z-index:80;display:flex;flex-direction:column;gap:8px;max-width:calc(100vw - 28px)}
 .toast{background:rgba(20,20,30,.96);border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:12px;padding:12px 16px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:slide .35s cubic-bezier(.2,1.4,.4,1)}
@@ -185,209 +170,161 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 
-<!-- LOGIN / SIGN UP -->
-<div class="overlay" id="auth">
-  <div class="authcard">
-    <h1 class="logo"><span class="grad coinName">Coin</span> <span style="font-weight:400;color:var(--muted)">Lab</span></h1>
-    <p class="hint" id="authSub">Create an account to get your own wallet and join the live network.</p>
-
-    <div class="banner bad" id="setupWarn" hidden style="margin:0 0 14px">Firebase isn't connected yet. Paste your config into <code>firebase-config.js</code> to turn on accounts.</div>
-
-    <div id="authMain">
-      <div class="mode" id="mode"><button data-m="signup" class="on">Sign up</button><button data-m="login">Log in</button></div>
-      <button class="gbtn" id="gBtn" type="button">
-        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
-        Continue with Google
-      </button>
-      <div class="or">or use email</div>
-      <form id="authForm" autocomplete="on">
-        <div class="field" id="fUser"><input type="text" id="aUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
-        <div class="field"><input type="email" id="aEmail" placeholder="Email" autocomplete="email" required></div>
-        <div class="field"><input type="password" id="aPass" placeholder="Password (6+ characters)" autocomplete="current-password" required></div>
-        <button class="btn big" id="aSubmit" type="submit" style="margin-top:6px">Create account</button>
-        <button class="linkbtn" id="aForgot" type="button" hidden>Forgot password?</button>
-      </form>
-    </div>
-
-    <!-- shown after first Google sign-in (or if the username step failed) -->
-    <form id="profileForm" hidden>
-      <p class="hint">One last step. Pick a username. We'll generate your wallet keys in your browser.</p>
-      <div class="field"><input type="text" id="pUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocapitalize="none" spellcheck="false"></div>
-      <button class="btn big" id="pSubmit" type="submit" style="margin-top:6px">Create my wallet</button>
-      <button class="linkbtn" id="pLogout" type="button">Use a different account</button>
-    </form>
-    <div class="msg" id="authMsg"></div>
-  </div>
-</div>
-
 <header>
   <div class="top">
     <div>
-      <h1 class="logo"><span class="grad coinName">Coin</span> <span style="font-weight:400;color:var(--muted)">Lab</span></h1>
-      <p class="tag">Build your own money from scratch. No bank, no middleman.</p>
+      <h1 class="logo"><span class="grad coinName">Coin</span> blockchain</h1>
+      <p class="tag">How a new person joins a blockchain that's already running.</p>
     </div>
     <div class="me" id="meChip" hidden></div>
   </div>
   <div class="stats">
-    <div class="stat"><span class="live"></span>Live network</div>
+    <div class="stat"><span class="live"></span>Live</div>
     <div class="stat">Blocks<b id="sBlocks">1</b></div>
-    <div class="stat">Users<b id="sUsers">0</b></div>
+    <div class="stat">Members<b id="sUsers">0</b></div>
     <div class="stat">Coins in existence<b id="sSupply">0</b></div>
-    <div class="stat">Waiting to be mined<b id="sPending">0</b></div>
   </div>
 </header>
 
 <div class="tabbar">
-  <div class="tabs" role="tablist" aria-label="Levels">
-    <button class="tab" role="tab" id="tab-t1" aria-controls="t1" aria-selected="true" data-tab="t1"><span class="num">1</span>Mint</button>
-    <button class="tab" role="tab" id="tab-t2" aria-controls="t2" aria-selected="false" data-tab="t2" tabindex="-1"><span class="num">2</span>Mine</button>
-    <button class="tab" role="tab" id="tab-t3" aria-controls="t3" aria-selected="false" data-tab="t3" tabindex="-1"><span class="num">3</span>Send</button>
-    <button class="tab" role="tab" id="tab-t4" aria-controls="t4" aria-selected="false" data-tab="t4" tabindex="-1"><span class="num">4</span>Ledger</button>
+  <div class="tabs" role="tablist" aria-label="Steps">
+    <button class="tab" role="tab" id="tab-t1" aria-controls="t1" aria-selected="true" data-tab="t1"><span class="num">1</span>The network</button>
+    <button class="tab" role="tab" id="tab-t2" aria-controls="t2" aria-selected="false" data-tab="t2" tabindex="-1"><span class="num">2</span>Join</button>
+    <button class="tab" role="tab" id="tab-t3" aria-controls="t3" aria-selected="false" data-tab="t3" tabindex="-1"><span class="num">3</span>Take part</button>
   </div>
 </div>
 
 <main>
-<!-- 1 MINT -->
+<!-- 1 THE NETWORK -->
 <section id="t1" class="on" role="tabpanel" aria-labelledby="tab-t1">
-  <p class="intro">Where do coins come from?</p>
-  <p class="sub">A coin is just a number nobody can fake. Two ingredients make that work: a <b>fingerprint</b> function (hashing) and <b>key pairs</b> (wallets).</p>
+  <p class="intro">A blockchain that's already running</p>
+  <p class="sub">These people already share one ledger. Nobody owns it, and anyone can look at it. This is what it looks like right now.</p>
   <div class="grid">
-    <div class="card">
-      <h3>The fingerprint machine</h3>
-      <p class="hint">SHA-256 turns any text into a 64-character fingerprint. Change ONE letter and the whole thing looks different.</p>
-      <label class="lbl">Message A</label><input type="text" id="hA" value="Hello class" autocomplete="off">
-      <div class="hash" id="hOutA" style="margin-top:8px"></div>
-      <label class="lbl">Message B</label><input type="text" id="hB" value="Hello class!" autocomplete="off">
-      <div class="hash" id="hOutB" style="margin-top:8px"></div>
-      <label class="lbl">Avalanche effect</label>
-      <div class="bar" style="margin-top:0"><i id="hBar"></i></div>
-      <p class="hint" id="hBits" style="margin:8px 0 0"></p>
+    <div class="card wide">
+      <h3><span class="n">1</span>The chain you just found</h3>
+      <p class="hint">Every block points to the one before it. New blocks appear here live.</p>
+      <div id="netNote"></div>
+      <div class="chain" id="chain"></div>
     </div>
-
     <div class="card">
-      <h3>Your wallet</h3>
-      <div class="formula">private key → (elliptic-curve math) → public key<br>address = "<span class="tk"></span>" + SHA256(public key)[0..40]</div>
-      <p class="hint">Private key = your signature stamp. Public key = how others check it's really you. You can't go backwards from public to private.</p>
-      <div id="wDetail"></div>
+      <h3><span class="n">1</span>Find the blockchain</h3>
+      <p class="hint">A blockchain isn't in one place, so you need two things to find it:</p>
+      <div class="steps">
+        <div class="step"><i>a</i><div><b>An entry point</b><small>A known address of someone already on the network. For us it's this website. In Bitcoin it's a list of "seed" computers.</small></div></div>
+        <div class="step"><i>b</i><div><b>Its ID: the genesis block</b><small>Every blockchain starts with a first block. Its fingerprint is the chain's ID, and every honest copy begins with the same one.</small></div></div>
+      </div>
+      <span class="lbl">This blockchain's ID (genesis hash)</span>
+      <div class="hash" id="genHash"></div>
     </div>
-
     <div class="card">
-      <h3>Unique coin IDs</h3>
-      <div class="formula">id = SHA256( from + to + amount + timestamp )</div>
-      <p class="hint">There are 2<sup>256</sup> possible IDs, more than the number of atoms in the Milky Way, so two coins never share one.</p>
-      <button class="btn" id="genId" style="margin-top:0">Mint an ID ✨</button>
-      <div class="list" id="idLog" style="margin-top:12px"></div>
+      <h3>Members</h3>
+      <p class="hint">Everyone who has joined, in the order they joined.</p>
+      <div id="members"></div>
     </div>
-
-    <div class="card">
-      <h3>Block #0: the genesis block</h3>
-      <p class="hint">Every chain starts with a hard-coded first block. Every later block stores the hash of the one before it, so they're welded together.</p>
-      <div class="formula">blockHash = SHA256( index + prevHash + time + transactions + nonce + miner )</div>
-      <div class="hash" id="genesis"></div>
+    <div class="card wide">
+      <h3>The five steps to join</h3>
+      <div class="steps">
+        <div class="step"><i>1</i><div><b>Find the blockchain</b><small>Use its entry point and check its genesis block.</small></div></div>
+        <div class="step"><i>2</i><div><b>Get a wallet</b><small>Make your own key pair and address. That's your identity. No one issues it to you.</small></div></div>
+        <div class="step"><i>3</i><div><b>Download the chain</b><small>Ask the network for every block and keep a full copy.</small></div></div>
+        <div class="step"><i>4</i><div><b>Check every block yourself</b><small>Verify the hashes, the work and the signatures, so you never have to trust anyone.</small></div></div>
+        <div class="step"><i>5</i><div><b>Take part</b><small>You're a member: receive coins, send coins, and mine new blocks.</small></div></div>
+      </div>
+      <button class="btn big" id="toJoin">Start joining →</button>
     </div>
   </div>
 </section>
 
-<!-- 2 MINE -->
+<!-- 2 JOIN -->
 <section id="t2" role="tabpanel" aria-labelledby="tab-t2">
-  <p class="intro">Mining is a guessing game with a real cost</p>
-  <p class="sub">To add a block, find a nonce (a random number) that makes the block's hash start with zeros. There's no shortcut, so you guess. The first classmate to find one wins the reward, and everyone's screen updates instantly.</p>
+  <p class="intro">Join the blockchain</p>
+  <p class="sub">Steps 2 to 4: get a wallet, download the chain, and check every block yourself.</p>
   <div class="grid">
     <div class="card">
-      <h3>Your mining rig</h3>
-      <p class="hint" id="mineSub">Reward goes to your wallet.</p>
-      <div class="formula">Goal: SHA256(block + nonce) starts with "<span id="zeroTxt"></span>"</div>
-      <label class="toggle"><input type="checkbox" id="slow"> Slow motion, so the class can watch each guess</label>
-      <button class="btn big" id="mineBtn">⛏️ Start mining</button>
-      <button class="btn ghost" id="stopBtn" disabled style="width:100%;margin-top:8px">Stop</button>
+      <h3><span class="n" id="n1">2</span>Get a wallet</h3>
+      <div id="authBox">
+        <p class="hint" id="authSub">Create an account. Your browser generates your wallet keys.</p>
+        <div class="banner bad" id="setupWarn" hidden style="margin:0 0 14px">Firebase isn't connected yet. Paste your config into <code>firebase-config.js</code>.</div>
+        <div id="authMain">
+          <div class="mode" id="mode"><button data-m="signup" class="on">Sign up</button><button data-m="login">Log in</button></div>
+          <button class="gbtn" id="gBtn" type="button">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+          <div class="or">or use email</div>
+          <form id="authForm" autocomplete="on">
+            <div class="field" id="fUser"><input type="text" id="aUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+            <div class="field"><input type="email" id="aEmail" placeholder="Email" autocomplete="email" required></div>
+            <div class="field"><input type="password" id="aPass" placeholder="Password (6+ characters)" autocomplete="current-password" required></div>
+            <button class="btn big" id="aSubmit" type="submit" style="margin-top:6px">Create my wallet</button>
+            <button class="linkbtn" id="aForgot" type="button" hidden>Forgot password?</button>
+          </form>
+        </div>
+        <form id="profileForm" hidden>
+          <p class="hint">Signed in. Pick a username and we'll generate your wallet.</p>
+          <div class="field"><input type="text" id="pUser" placeholder="Pick a username (a-z, 0-9, _)" maxlength="16" autocapitalize="none" spellcheck="false"></div>
+          <button class="btn big" id="pSubmit" type="submit" style="margin-top:6px">Create my wallet</button>
+          <button class="linkbtn" id="pLogout" type="button">Use a different account</button>
+        </form>
+        <div class="msg" id="authMsg"></div>
+      </div>
+      <div id="walletBox" hidden></div>
     </div>
 
     <div class="card">
-      <h3>Live guesses</h3>
-      <span class="lbl" style="margin-top:0">Nonce</span><div class="slot" id="mNonce">0</div>
-      <span class="lbl">Latest hash</span><div class="hash" id="mHash">Press start…</div>
+      <h3><span class="n" id="n2">3</span>Download and check the chain</h3>
+      <p class="hint" id="syncHint">Step 3 downloads every block. Step 4 checks each one on your own device: the hash, the work, and every signature.</p>
+      <div class="sync" id="sync"><div class="empty">Waiting for step 2.</div></div>
+      <div id="syncDone"></div>
+      <button class="btn ghost" id="resync" hidden>Replay the check</button>
+    </div>
+  </div>
+</section>
+
+<!-- 3 TAKE PART -->
+<section id="t3" role="tabpanel" aria-labelledby="tab-t3">
+  <p class="intro">Step 5: you're a member. Take part.</p>
+  <div class="card" id="gate" hidden>
+    <h3>Join first</h3>
+    <p class="hint">You need a wallet before you can receive, send or mine.</p>
+    <button class="btn" id="gateBtn" style="margin-top:0">Go to Join →</button>
+  </div>
+  <div class="grid" id="part" hidden>
+    <div class="card">
+      <h3>Your coins</h3>
+      <div class="balbig" id="myBal">0 <small class="tk"></small></div>
+      <span class="lbl">Your address (share it so someone can pay you)</span>
+      <div class="hash" id="myAddr"></div>
+      <button class="btn ghost small" id="copyAddr" style="margin-top:10px">Copy address</button>
+    </div>
+
+    <div class="card">
+      <h3>Earn coins: mine a block</h3>
+      <p class="hint">Solve a small puzzle to add the next block to the chain and earn the reward. Everyone's screen updates.</p>
+      <button class="btn big" id="mineBtn" style="margin-top:0">⛏️ Mine a block</button>
+      <button class="btn ghost" id="stopBtn" disabled style="width:100%;margin-top:8px">Stop</button>
       <div class="bar"><i id="mBar"></i></div>
-      <p class="hint" id="mRate" style="margin:8px 0 0"></p>
+      <p class="hint" id="mText" style="margin:8px 0 0"></p>
       <div id="mResult"></div>
     </div>
 
     <div class="card">
-      <h3>Leaderboard</h3>
-      <p class="hint">Nobody stores your balance. It's calculated by adding up every transaction on the chain.</p>
-      <div id="bal2"></div>
-    </div>
-
-    <div class="card">
-      <h3>Latest blocks</h3>
-      <p class="hint">Blocks found by anyone on the network show up here live.</p>
-      <div class="list" id="recent"></div>
-    </div>
-
-    <div class="card wide" style="grid-column:1/-1">
-      <h3>Why can't a coin be copied?</h3>
-      <div class="steps" style="margin-top:6px">
-        <div class="step" style="--d:0s"><i>1</i><div><b>Coins only appear by mining</b><small>The only "create money" transaction is the miner's reward, inside a block that took real work.</small></div></div>
-        <div class="step" style="--d:.15s"><i>2</i><div><b>Blocks are chained</b><small>Each block contains the previous block's hash.</small></div></div>
-        <div class="step" style="--d:.3s"><i>3</i><div><b>Editing history breaks everything</b><small>Change one old block and every block after it becomes invalid. You'd have to re-mine them all. Try it in the <b>Ledger</b> tab.</small></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 3 SEND -->
-<section id="t3" role="tabpanel" aria-labelledby="tab-t3">
-  <p class="intro">Send money without a bank</p>
-  <p class="sub">You sign a transaction with your private key. Everyone on the network can verify the signature with your public key, without ever seeing the private one.</p>
-  <div class="grid">
-    <div class="card">
-      <h3>Send coins</h3>
-      <span class="lbl" style="margin-top:8px">Your balance</span><div class="balbig" id="myBal">0 <small class="tk"></small></div>
-      <label class="lbl">To</label>
-      <input type="text" id="toSearch" placeholder="Search a username…" autocomplete="off" autocapitalize="none">
-      <div class="chips" id="toChips" style="margin-top:10px"></div>
+      <h3>Send coins to a member</h3>
+      <div class="chips" id="toChips"></div>
       <label class="lbl">Amount</label>
       <input type="number" id="tAmt" min="1" step="1" value="10" inputmode="numeric">
-      <div class="row" style="margin-top:8px" id="quick"></div>
       <button class="btn big" id="sendBtn">Sign &amp; send</button>
-      <div id="tInfo"></div>
+      <div id="sendMsg"></div>
     </div>
 
     <div class="card">
-      <h3>Try to cheat the network</h3>
-      <p class="hint">Pick a receiver on the left, then attack. These run against the network's real rules, but nothing is sent.</p>
-      <button class="btn hack" id="atkForge" style="margin-top:0">Forge a signature</button>
-      <button class="btn hack" id="atkTamper">Edit after signing</button>
-      <button class="btn hack" id="atkOver">Spend more than I have</button>
-      <button class="btn hack" id="atkDouble">Double-spend</button>
-      <div class="list" id="atkLog" style="margin-top:12px"></div>
-    </div>
-
-    <div class="card">
-      <h3>Waiting room (mempool)</h3>
-      <p class="hint">Valid transactions wait here until a miner puts them in a block.</p>
-      <div class="list" id="pool"></div>
-      <button class="btn" id="goMine">Go mine them ⛏️</button>
-    </div>
-
-    <div class="card">
-      <h3>Recent payments</h3>
-      <p class="hint">Confirmed transactions from the whole class.</p>
+      <h3>Latest activity</h3>
       <div class="list" id="feed"></div>
     </div>
   </div>
 </section>
-
-<!-- 4 LEDGER -->
-<section id="t4" role="tabpanel" aria-labelledby="tab-t4">
-  <p class="intro">Boss level: rewrite history</p>
-  <p class="sub">This is your browser's own copy of the ledger. Change any amount to steal coins in the past, then watch your copy break. The real network never sees your edits.</p>
-  <div id="chainStatus" class="status ok"></div>
-  <div class="chain" id="chain"></div>
-  <div class="row"><button class="btn ghost" id="repair" style="margin-top:6px">Undo my crimes</button>
-  <span class="hint" id="forkNote" style="margin:8px 0 0"></span></div>
-</section>
 </main>
-<footer>Accounts by Firebase. Balances come from the shared blockchain, not from any server.</footer>
+<footer>Accounts by Firebase. Balances come from the shared blockchain, not from a server.</footer>
 
 <script type="module" src="app.js"></script>
 </body>

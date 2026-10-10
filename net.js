@@ -26,12 +26,12 @@ const nice = e => {
 };
 export const errText = nice;
 
-function watch(name, cb) {
+function watch(name, cb, onErr) {
   const map = new Map();
   return fb.onSnapshot(fb.collection(db, name), snap => {
     snap.docChanges().forEach(c => c.type === "removed" ? map.delete(c.doc.id) : map.set(c.doc.id, c.doc.data()));
     cb([...map.entries()].map(([id, d]) => ({ _id: id, ...d })));
-  }, err => console.error("watch " + name, err));
+  }, err => { console.error("watch " + name, err); if (onErr) onErr(err); });
 }
 
 export const net = {
@@ -56,9 +56,9 @@ export const net = {
     b.set(fb.doc(db, "users", uid, "secret", "key"), { jwk: JSON.stringify(jwk) });
     await b.commit();
   },
-  watchBlocks: cb => watch("blocks", cb),
-  watchMempool: cb => watch("mempool", cb),
-  watchUsers: cb => watch("users", cb),
+  watchBlocks: (cb, onErr) => watch("blocks", cb, onErr),
+  watchMempool: (cb, onErr) => watch("mempool", cb, onErr),
+  watchUsers: (cb, onErr) => watch("users", cb, onErr),
   postBlock: b => fb.setDoc(fb.doc(db, "blocks", b.hash), b),
   postTx: t => fb.setDoc(fb.doc(db, "mempool", t.id), t)
 };
