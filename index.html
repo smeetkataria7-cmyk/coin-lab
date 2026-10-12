@@ -179,6 +179,11 @@ input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(61,240,255,.16)}
 .aa{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:5px 14px;font:600 13px var(--sans);cursor:pointer}
 .aa:hover{background:var(--card2)}
 body.big{zoom:1.25}
+.refs{margin:0;padding-left:22px}
+.refs li{margin:0 0 10px;font-size:15px}
+.refs a{color:var(--cyan);text-decoration:none;font-weight:600}
+.refs a:hover{text-decoration:underline}
+.refs small{display:block;color:var(--muted);font-size:13px}
 footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted);font-size:13px;text-align:center}
 </style>
 </head>
@@ -263,6 +268,24 @@ footer{max-width:1120px;margin:8px auto 0;padding:0 18px 34px;color:var(--muted)
         <div class="step"><i>5</i><div><b>Take part</b><small>You're a member: receive coins, send coins, and mine new blocks.</small></div></div>
       </div>
       <button class="btn big" id="toJoin">Start joining →</button>
+    </div>
+    <div class="card wide" id="refs">
+      <h3>References</h3>
+      <p class="hint">Where the ideas in this demo come from.</p>
+      <ol class="refs">
+        <li><a href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener">Bitcoin: A Peer-to-Peer Electronic Cash System (S. Nakamoto, 2008)</a><small>Blocks, the chain, proof of work, peer-to-peer payments</small></li>
+        <li><a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final" target="_blank" rel="noopener">NIST FIPS 180-4: Secure Hash Standard</a><small>SHA-256, the fingerprint function</small></li>
+        <li><a href="https://csrc.nist.gov/pubs/fips/186-5/final" target="_blank" rel="noopener">NIST FIPS 186-5: Digital Signature Standard</a><small>ECDSA signatures and the P-256 curve used by our wallets</small></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto" target="_blank" rel="noopener">MDN Web Docs: SubtleCrypto (Web Crypto API)</a><small>How the browser makes keys and signs payments</small></li>
+        <li><a href="https://developer.bitcoin.org/devguide/block_chain.html" target="_blank" rel="noopener">Bitcoin Developer Guide: Block Chain</a><small>How blocks link to each other and are checked</small></li>
+        <li><a href="https://developer.bitcoin.org/devguide/p2p_network.html" target="_blank" rel="noopener">Bitcoin Developer Guide: P2P Network</a><small>How a new node finds peers (DNS seeds): the entry point</small></li>
+        <li><a href="https://en.bitcoin.it/wiki/Genesis_block" target="_blank" rel="noopener">Bitcoin Wiki: Genesis block</a><small>The first block, hard-coded as the chain's ID</small></li>
+        <li><a href="https://en.bitcoin.it/wiki/Proof_of_work" target="_blank" rel="noopener">Bitcoin Wiki: Proof of work</a><small>The mining puzzle (hash starting with zeros)</small></li>
+        <li><a href="https://en.bitcoin.it/wiki/Secp256k1" target="_blank" rel="noopener">Bitcoin Wiki: secp256k1</a><small>The curve Bitcoin uses (we use P-256 because browsers support it)</small></li>
+        <li><a href="https://firebase.google.com/docs/auth/web/start" target="_blank" rel="noopener">Firebase Documentation: Authentication for web</a><small>Google and email/password sign-in</small></li>
+        <li><a href="https://firebase.google.com/docs/firestore/security/get-started" target="_blank" rel="noopener">Firebase Documentation: Firestore security rules</a><small>Who may read and write the shared chain</small></li>
+        <li><a href="https://docs.github.com/en/pages" target="_blank" rel="noopener">GitHub Docs: GitHub Pages</a><small>Where the site is hosted</small></li>
+      </ol>
     </div>
   </div>
 </section>
